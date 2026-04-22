@@ -132,6 +132,37 @@ configure the widget like this:
 />
 ```
 
+### Copy/Paste Setup Snippet (`GetQueryResponse`)
+
+React:
+
+```tsx
+<ChatWidget
+  endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
+  method="POST"
+  apiKey={import.meta.env.VITE_GENERAL_QUERY_API_KEY}
+  assistantId={import.meta.env.VITE_GENERAL_QUERY_ASSISTANT_ID}
+  responsePath="Result"
+  fallbackErrorMessage="Unable to get query response from API."
+/>
+```
+
+Plain HTML:
+
+```html
+<script src="./dist-widget/sea-chat-widget.js"></script>
+<script>
+  window.SeaChatWidget.init({
+    endpointUrl: "https://your-api-host/api/Chat/GetQueryResponse",
+    method: "POST",
+    apiKey: "<encrypted-api-key>",
+    assistantId: "assistant-001",
+    responsePath: "Result",
+    fallbackErrorMessage: "Unable to get query response from API.",
+  });
+</script>
+```
+
 ### Quick Setup (3 steps)
 
 1. Set `endpointUrl` to your `GetQueryResponse` API.
