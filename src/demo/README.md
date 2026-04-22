@@ -115,6 +115,15 @@ For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest re
 />
 ```
 
+Simple setup:
+
+1. Put your API URL in `endpointUrl`.
+2. Put encrypted API key in `apiKey`.
+3. Put target assistant id in `assistantId`.
+4. Keep `responsePath="Result"`.
+
+The widget prioritizes this custom endpoint flow when `endpointUrl` is provided.
+
 Default request body sent by the widget in this mode:
 
 ```json
@@ -155,7 +164,8 @@ Before you share the widget, test:
 
 ### Can't send messages
 
-- Check the API key: `VITE_OPENAI_API_KEY` in `.env.local`
+- For OpenAI direct mode: check `VITE_OPENAI_API_KEY` in `.env.local`
+- For `GetQueryResponse` mode: check `VITE_GENERAL_QUERY_ENDPOINT_URL`, `VITE_GENERAL_QUERY_API_KEY`, and `VITE_GENERAL_QUERY_ASSISTANT_ID`
 - Check DevTools → Network tab - are there API calls?
 - Check DevTools → Console for errors
 

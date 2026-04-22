@@ -1,6 +1,6 @@
 # Chat Widget Status
 
-Last updated: 2026-04-21
+Last updated: 2026-04-22
 
 ## Current State
 
@@ -33,6 +33,9 @@ Last updated: 2026-04-21
 - **[V2] Optional `file_search` tool enabled by passing `vectorStoreId`**
 - **[V2] Init options changed: `request.*` replaced by `openaiApiKey`, `model`, `instructions`, `vectorStoreId`**
 - **[V2] Assistant-UI styles injected into Shadow DOM alongside widget CSS**
+- **[V2] Custom endpoint is prioritized when `endpointUrl` is provided**
+- **[V2] `GetQueryResponse` endpoint now auto-uses `{ ApiKey, UserQuery, AssistantId }` request body**
+- **[V2] ApiResponse envelope handling (`Success`, `Message`, `Result`) documented and wired for endpoint flow**
 
 ## Pending / Out of Scope
 

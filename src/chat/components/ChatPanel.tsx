@@ -50,6 +50,45 @@ export function ChatPanel(props: ChatPanelProps) {
               { prompt: WELCOME_SUGGESTIONS[2] },
             ],
           }}
+          userMessage={{
+            allowEdit: true,
+          }}
+          assistantMessage={{
+            allowReload: true,
+            allowCopy: true,
+            allowSpeak: false,
+            allowFeedbackPositive: false,
+            allowFeedbackNegative: false,
+          }}
+          composer={{
+            allowAttachments: false,
+          }}
+          strings={{
+            composer: {
+              input: {
+                placeholder: "Type your message...",
+              },
+              send: {
+                tooltip: "Send message",
+              },
+              cancel: {
+                tooltip: "Stop response",
+              },
+            },
+            userMessage: {
+              edit: {
+                tooltip: "Edit this message",
+              },
+            },
+            assistantMessage: {
+              reload: {
+                tooltip: "Regenerate response",
+              },
+              copy: {
+                tooltip: "Copy response",
+              },
+            },
+          }}
         />
       </div>
     </div>

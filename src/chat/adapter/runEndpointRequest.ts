@@ -14,10 +14,15 @@ export async function runEndpointRequest(
 
   // "const" = these values are set once and never changed
   const method = options.method ?? "POST";
+  const isGetQueryResponseEndpoint = /getqueryresponse/i.test(
+    options.endpointUrl,
+  );
   const hasGeneralQueryConfig =
     options.apiKey !== undefined || options.assistantId !== undefined;
+  const shouldAutoUseGeneralQuery =
+    hasGeneralQueryConfig || isGetQueryResponseEndpoint;
   const useGeneralQueryRequest =
-    options.useGeneralQueryRequest ?? hasGeneralQueryConfig;
+    options.useGeneralQueryRequest ?? shouldAutoUseGeneralQuery;
 
   // "let" = responseBody may be replaced below if the user provided a template
   let responseBody = options.body;

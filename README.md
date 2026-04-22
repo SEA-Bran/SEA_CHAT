@@ -93,6 +93,10 @@ export function MyPage() {
 
 ### Use a Custom ASP.NET Endpoint (`GetQueryResponse`)
 
+Simple rule: if `endpointUrl` is set, the widget uses your custom endpoint first.
+
+For `GetQueryResponse`, the widget auto-uses the `GeneralQueryRequest` body shape.
+
 If your backend exposes this endpoint:
 
 ```csharp
@@ -128,7 +132,27 @@ configure the widget like this:
 />
 ```
 
-The widget sends this JSON body by default when `apiKey` and/or `assistantId` are provided:
+### Quick Setup (3 steps)
+
+1. Set `endpointUrl` to your `GetQueryResponse` API.
+2. Set `apiKey` and `assistantId`.
+3. Set `responsePath` to `Result`.
+
+You can now chat immediately. Each user message is sent as:
+
+```json
+{
+  "ApiKey": "<encrypted-api-key>",
+  "UserQuery": "<latest user message>",
+  "AssistantId": "assistant-001"
+}
+```
+
+The widget sends this JSON body by default when:
+
+- your endpoint URL matches `GetQueryResponse`, or
+- `apiKey` and/or `assistantId` are provided, or
+- `useGeneralQueryRequest: true` is set.
 
 ```json
 {
@@ -139,6 +163,8 @@ The widget sends this JSON body by default when `apiKey` and/or `assistantId` ar
 ```
 
 You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, and `{{assistantId}}`.
+
+To force a different behavior, set `useGeneralQueryRequest: false`.
 
 ## Multi-Turn Conversations
 

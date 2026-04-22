@@ -261,6 +261,11 @@ Used to extract the response text from your API response.
 
 #### ASP.NET `GeneralQueryRequest` support
 
+Simple behavior:
+
+- If `endpointUrl` is present, endpoint mode is always used before direct OpenAI mode.
+- If the URL contains `GetQueryResponse`, request body defaults to `GeneralQueryRequest`.
+
 When you pass `apiKey` and/or `assistantId`, endpoint requests default to:
 
 ```json
@@ -284,6 +289,8 @@ If you pass `body`, the adapter keeps using your custom payload, with support fo
 - `{{messages}}`
 - `{{apiKey}}`
 - `{{assistantId}}`
+
+If you want to disable this automatic `GeneralQueryRequest` body behavior, set `useGeneralQueryRequest: false`.
 
 ### `adapter/types.ts`
 
