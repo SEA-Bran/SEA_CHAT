@@ -2,7 +2,8 @@ import type { MessageHistory } from "./types";
 
 type RequestTemplateContext = {
   apiKey: string;
-  assistantId: string;
+  userRole: string;
+  model: string;
 };
 
 export function buildRequestBody(
@@ -13,7 +14,8 @@ export function buildRequestBody(
 ): unknown {
   const templateContext = context ?? {
     apiKey: "",
-    assistantId: "",
+    userRole: "user",
+    model: "",
   };
 
   if (typeof template === "string") {
@@ -24,7 +26,8 @@ export function buildRequestBody(
       .replace(/\{\{userQuery\}\}/g, userText)
       .replace(/\{\{messages\}\}/g, JSON.stringify(history))
       .replace(/\{\{apiKey\}\}/g, templateContext.apiKey)
-      .replace(/\{\{assistantId\}\}/g, templateContext.assistantId);
+      .replace(/\{\{userRole\}\}/g, templateContext.userRole)
+      .replace(/\{\{model\}\}/g, templateContext.model);
   }
 
   if (Array.isArray(template)) {

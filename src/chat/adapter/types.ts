@@ -11,10 +11,13 @@ export type EndpointOptions = {
   endpointUrl?: string;
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   headers?: Record<string, string>;
+  authKey?: string;
+  authValue?: string;
   body?: unknown;
   apiKey?: string;
-  assistantId?: string;
-  useGeneralQueryRequest?: boolean;
+  userRole?: string;
+  model?: string;
+  useCustomEndpointRequest?: boolean;
   responsePath?: string;
   fallbackErrorMessage?: string;
 };

@@ -108,8 +108,11 @@ For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest re
 <ChatWidget
   endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
   method="POST"
+  authKey="X-Auth-Key"
+  authValue="your-auth-value"
   apiKey="<encrypted-api-key>"
-  assistantId="assistant-001"
+  userRole="user"
+  model="gpt-4.1"
   responsePath="Result"
   assistantName="My API"
 />
@@ -118,9 +121,12 @@ For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest re
 Simple setup:
 
 1. Put your API URL in `endpointUrl`.
-2. Put encrypted API key in `apiKey`.
-3. Put target assistant id in `assistantId`.
-4. Keep `responsePath="Result"`.
+2. If needed, put custom header name in `authKey`.
+3. If needed, put custom header value in `authValue`.
+4. Put encrypted API key in `apiKey`.
+5. Put request role in `userRole`.
+6. Put model name in `model`.
+7. Keep `responsePath="Result"`.
 
 The widget prioritizes this custom endpoint flow when `endpointUrl` is provided.
 
@@ -128,9 +134,10 @@ Default request body sent by the widget in this mode:
 
 ```json
 {
-  "ApiKey": "<encrypted-api-key>",
-  "UserQuery": "<user text>",
-  "AssistantId": "assistant-001"
+  "apiKey": "<encrypted-api-key>",
+  "userQuery": "<user text>",
+  "userRole": "user",
+  "model": "gpt-4.1"
 }
 ```
 
@@ -165,7 +172,7 @@ Before you share the widget, test:
 ### Can't send messages
 
 - For OpenAI direct mode: check `VITE_OPENAI_API_KEY` in `.env.local`
-- For `GetQueryResponse` mode: check `VITE_GENERAL_QUERY_ENDPOINT_URL`, `VITE_GENERAL_QUERY_API_KEY`, and `VITE_GENERAL_QUERY_ASSISTANT_ID`
+- For custom endpoint mode: check `VITE_GENERAL_QUERY_ENDPOINT_URL`, `VITE_GENERAL_QUERY_AUTH_KEY`, `VITE_GENERAL_QUERY_AUTH_VALUE`, `VITE_GENERAL_QUERY_API_KEY`, `VITE_GENERAL_QUERY_USER_ROLE`, and `VITE_GENERAL_QUERY_MODEL`
 - Check DevTools → Network tab - are there API calls?
 - Check DevTools → Console for errors
 

@@ -14,25 +14,23 @@ export async function runEndpointRequest(
 
   // "const" = these values are set once and never changed
   const method = options.method ?? "POST";
-  const isGetQueryResponseEndpoint = /getqueryresponse/i.test(
-    options.endpointUrl,
-  );
-  const hasGeneralQueryConfig =
-    options.apiKey !== undefined || options.assistantId !== undefined;
-  const shouldAutoUseGeneralQuery =
-    hasGeneralQueryConfig || isGetQueryResponseEndpoint;
-  const useGeneralQueryRequest =
-    options.useGeneralQueryRequest ?? shouldAutoUseGeneralQuery;
+  const hasCustomEndpointConfig =
+    options.apiKey !== undefined ||
+    options.userRole !== undefined ||
+    options.model !== undefined;
+  const useCustomEndpointRequest =
+    options.useCustomEndpointRequest ?? hasCustomEndpointConfig;
 
   // "let" = responseBody may be replaced below if the user provided a template
   let responseBody = options.body;
 
   if (responseBody === undefined) {
-    if (useGeneralQueryRequest) {
+    if (useCustomEndpointRequest) {
       responseBody = {
-        ApiKey: options.apiKey ?? "",
-        UserQuery: userText,
-        AssistantId: options.assistantId ?? "",
+        apiKey: options.apiKey ?? "",
+        userQuery: userText,
+        userRole: options.userRole ?? "user",
+        model: options.model ?? "",
       };
     } else {
       // No custom body provided — use a simple default with the user's message
@@ -42,7 +40,8 @@ export async function runEndpointRequest(
     // Fill in any {{message}} or {{messages}} placeholders in the custom body
     responseBody = buildRequestBody(responseBody, userText, history, {
       apiKey: options.apiKey ?? "",
-      assistantId: options.assistantId ?? "",
+      userRole: options.userRole ?? "user",
+      model: options.model ?? "",
     });
   }
 
@@ -60,6 +59,10 @@ export async function runEndpointRequest(
     for (const headerName in options.headers) {
       requestHeaders[headerName] = options.headers[headerName];
     }
+  }
+
+  if (options.authKey) {
+    requestHeaders[options.authKey] = options.authValue ?? "";
   }
 
   // Build the fetch options object
@@ -112,7 +115,7 @@ export async function runEndpointRequest(
     return text;
   }
 
-  if (useGeneralQueryRequest && json && typeof json === "object") {
+  if (useCustomEndpointRequest && json && typeof json === "object") {
     const apiResponse = json as Record<string, unknown>;
     const success = apiResponse.Success;
     const message = apiResponse.Message;

@@ -264,23 +264,23 @@ Used to extract the response text from your API response.
 Simple behavior:
 
 - If `endpointUrl` is present, endpoint mode is always used before direct OpenAI mode.
-- If the URL contains `GetQueryResponse`, request body defaults to `GeneralQueryRequest`.
+- If `body` is not provided, request body defaults to the custom endpoint format below.
 
-When you pass `apiKey` and/or `assistantId`, endpoint requests default to:
+For custom links, endpoint requests default to:
 
 ```json
 {
-  "ApiKey": "...",
-  "UserQuery": "latest user text",
-  "AssistantId": "..."
+  "apiKey": "...",
+  "userQuery": "latest user text",
+  "userRole": "user",
+  "model": "gpt-4.1"
 }
 ```
 
-This matches a backend action like:
+If `authKey` is set, the request also includes this extra header:
 
-```csharp
-[HttpPost(nameof(GetQueryResponse))]
-public async Task<ActionResult> GetQueryResponse([FromBody] GeneralQueryRequest req) { }
+```text
+{ [authKey]: authValue }
 ```
 
 If you pass `body`, the adapter keeps using your custom payload, with support for placeholders:
@@ -288,9 +288,10 @@ If you pass `body`, the adapter keeps using your custom payload, with support fo
 - `{{message}}` / `{{prompt}}` / `{{userInput}}` / `{{userQuery}}`
 - `{{messages}}`
 - `{{apiKey}}`
-- `{{assistantId}}`
+- `{{userRole}}`
+- `{{model}}`
 
-If you want to disable this automatic `GeneralQueryRequest` body behavior, set `useGeneralQueryRequest: false`.
+If you want to disable this automatic custom-endpoint body behavior, set `useCustomEndpointRequest: false`.
 
 ### `adapter/types.ts`
 

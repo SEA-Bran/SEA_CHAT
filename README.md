@@ -95,27 +95,14 @@ export function MyPage() {
 
 Simple rule: if `endpointUrl` is set, the widget uses your custom endpoint first.
 
-For `GetQueryResponse`, the widget auto-uses the `GeneralQueryRequest` body shape.
+For custom links, the widget auto-uses this request body when `body` is not provided:
 
-If your backend exposes this endpoint:
-
-```csharp
-[HttpPost(nameof(GetQueryResponse))]
-public async Task<ActionResult> GetQueryResponse([FromBody] GeneralQueryRequest req) { }
-```
-
-and expects:
-
-```csharp
-public class GeneralQueryRequest : BaseRequest
+```json
 {
-    public string UserQuery { get; set; } = string.Empty;
-    public string AssistantId { get; set; } = string.Empty;
-}
-
-public class BaseRequest
-{
-    public string ApiKey { get; set; }
+  "apiKey": "string",
+  "userQuery": "string",
+  "userRole": "string",
+  "model": "string"
 }
 ```
 
@@ -125,8 +112,11 @@ configure the widget like this:
 <ChatWidget
   endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
   method="POST"
+  authKey="X-Auth-Key"
+  authValue="your-auth-value"
   apiKey="<encrypted-api-key>"
-  assistantId="assistant-001"
+  userRole="user"
+  model="gpt-4.1"
   responsePath="Result"
   fallbackErrorMessage="Unable to reach assistant right now."
 />
@@ -140,8 +130,11 @@ React:
 <ChatWidget
   endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
   method="POST"
+  authKey={import.meta.env.VITE_GENERAL_QUERY_AUTH_KEY}
+  authValue={import.meta.env.VITE_GENERAL_QUERY_AUTH_VALUE}
   apiKey={import.meta.env.VITE_GENERAL_QUERY_API_KEY}
-  assistantId={import.meta.env.VITE_GENERAL_QUERY_ASSISTANT_ID}
+  userRole={import.meta.env.VITE_GENERAL_QUERY_USER_ROLE ?? "user"}
+  model={import.meta.env.VITE_GENERAL_QUERY_MODEL ?? "gpt-4.1"}
   responsePath="Result"
   fallbackErrorMessage="Unable to get query response from API."
 />
@@ -155,8 +148,11 @@ Plain HTML:
   window.SeaChatWidget.init({
     endpointUrl: "https://your-api-host/api/Chat/GetQueryResponse",
     method: "POST",
+    authKey: "X-Auth-Key",
+    authValue: "your-auth-value",
     apiKey: "<encrypted-api-key>",
-    assistantId: "assistant-001",
+    userRole: "user",
+    model: "gpt-4.1",
     responsePath: "Result",
     fallbackErrorMessage: "Unable to get query response from API.",
   });
@@ -166,36 +162,45 @@ Plain HTML:
 ### Quick Setup (3 steps)
 
 1. Set `endpointUrl` to your `GetQueryResponse` API.
-2. Set `apiKey` and `assistantId`.
-3. Set `responsePath` to `Result`.
+2. Set `authKey` and `authValue` if your API requires a custom header.
+3. Set `apiKey`, `userRole`, and `model`.
+4. Set `responsePath` to `Result`.
+
+If `authKey` is provided, the widget sends an extra header using:
+
+```text
+{ [authKey]: authValue }
+```
 
 You can now chat immediately. Each user message is sent as:
 
 ```json
 {
-  "ApiKey": "<encrypted-api-key>",
-  "UserQuery": "<latest user message>",
-  "AssistantId": "assistant-001"
+  "apiKey": "<encrypted-api-key>",
+  "userQuery": "<latest user message>",
+  "userRole": "user",
+  "model": "gpt-4.1"
 }
 ```
 
 The widget sends this JSON body by default when:
 
-- your endpoint URL matches `GetQueryResponse`, or
-- `apiKey` and/or `assistantId` are provided, or
-- `useGeneralQueryRequest: true` is set.
+- `endpointUrl` is provided, or
+- `apiKey`, `userRole`, or `model` are provided, or
+- `useCustomEndpointRequest: true` is set.
 
 ```json
 {
-  "ApiKey": "<encrypted-api-key>",
-  "UserQuery": "<latest user message>",
-  "AssistantId": "assistant-001"
+  "apiKey": "<encrypted-api-key>",
+  "userQuery": "<latest user message>",
+  "userRole": "user",
+  "model": "gpt-4.1"
 }
 ```
 
-You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, and `{{assistantId}}`.
+You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{userRole}}`, and `{{model}}`.
 
-To force a different behavior, set `useGeneralQueryRequest: false`.
+To force a different behavior, set `useCustomEndpointRequest: false`.
 
 ## Multi-Turn Conversations
 

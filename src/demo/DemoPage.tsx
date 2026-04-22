@@ -3,7 +3,10 @@ import { ChatWidget } from "../chat/ChatWidget";
 export function DemoPage() {
   const endpointUrl = import.meta.env.VITE_GENERAL_QUERY_ENDPOINT_URL ?? "";
   const encryptedApiKey = import.meta.env.VITE_GENERAL_QUERY_API_KEY ?? "";
-  const assistantId = import.meta.env.VITE_GENERAL_QUERY_ASSISTANT_ID ?? "";
+  const authKey = import.meta.env.VITE_GENERAL_QUERY_AUTH_KEY ?? "";
+  const authValue = import.meta.env.VITE_GENERAL_QUERY_AUTH_VALUE ?? "";
+  const userRole = import.meta.env.VITE_GENERAL_QUERY_USER_ROLE ?? "user";
+  const model = import.meta.env.VITE_GENERAL_QUERY_MODEL ?? "gpt-4.1";
 
   return (
     <main className="app-shell">
@@ -35,9 +38,12 @@ export function DemoPage() {
       <ChatWidget
         endpointUrl={endpointUrl}
         method="POST"
+        authKey={authKey}
+        authValue={authValue}
         apiKey={encryptedApiKey}
-        assistantId={assistantId}
-        useGeneralQueryRequest
+        userRole={userRole}
+        model={model}
+        useCustomEndpointRequest
         responsePath="Result"
         fallbackErrorMessage="Unable to get query response from API."
       />
