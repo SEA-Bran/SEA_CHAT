@@ -25,7 +25,24 @@ export function resolvePath(value: unknown, path: string): string {
       return "";
     }
 
-    current = (current as Record<string, unknown>)[part];
+    const currentObject = current as Record<string, unknown>;
+
+    if (Object.prototype.hasOwnProperty.call(currentObject, part)) {
+      current = currentObject[part];
+      i += 1;
+      continue;
+    }
+
+    // Fall back to case-insensitive key matching so "Result" can resolve "result".
+    const matchingKey = Object.keys(currentObject).find(
+      (key) => key.toLowerCase() === part.toLowerCase(),
+    );
+
+    if (!matchingKey) {
+      return "";
+    }
+
+    current = currentObject[matchingKey];
     i += 1;
   }
 
