@@ -61,8 +61,13 @@ export async function runEndpointRequest(
     }
   }
 
+  // Add AuthKey and AuthValue headers if provided
   if (options.authKey) {
-    requestHeaders[options.authKey] = options.authValue ?? "";
+    requestHeaders["AuthKey"] = options.authKey;
+  }
+
+  if (options.authValue) {
+    requestHeaders["AuthValue"] = options.authValue;
   }
 
   // Build the fetch options object
