@@ -112,7 +112,7 @@ configure the widget like this:
 <ChatWidget
   endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
   method="POST"
-  authKey="X-Auth-Key"
+  authKey="your-auth-key-value"
   authValue="your-auth-value"
   apiKey="<encrypted-api-key>"
   userRole="user"
@@ -148,7 +148,7 @@ Plain HTML:
   window.SeaChatWidget.init({
     endpointUrl: "https://your-api-host/api/Chat/GetQueryResponse",
     method: "POST",
-    authKey: "X-Auth-Key",
+    authKey: "your-auth-key-value",
     authValue: "your-auth-value",
     apiKey: "<encrypted-api-key>",
     userRole: "user",
@@ -162,14 +162,15 @@ Plain HTML:
 ### Quick Setup (3 steps)
 
 1. Set `endpointUrl` to your `GetQueryResponse` API.
-2. Set `authKey` and `authValue` if your API requires a custom header.
+2. Set `authKey` and `authValue` if your API requires authentication headers.
 3. Set `apiKey`, `userRole`, and `model`.
 4. Set `responsePath` to `Result`.
 
-If `authKey` is provided, the widget sends an extra header using:
+If `authKey` and `authValue` are provided, the widget sends two separate headers:
 
 ```text
-{ [authKey]: authValue }
+AuthKey: <authKey value>
+AuthValue: <authValue value>
 ```
 
 You can now chat immediately. Each user message is sent as:

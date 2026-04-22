@@ -108,7 +108,7 @@ For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest re
 <ChatWidget
   endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
   method="POST"
-  authKey="X-Auth-Key"
+  authKey="your-auth-key-value"
   authValue="your-auth-value"
   apiKey="<encrypted-api-key>"
   userRole="user"
@@ -121,8 +121,8 @@ For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest re
 Simple setup:
 
 1. Put your API URL in `endpointUrl`.
-2. If needed, put custom header name in `authKey`.
-3. If needed, put custom header value in `authValue`.
+2. If needed, put auth key value in `authKey` (sent as HTTP header "AuthKey").
+3. If needed, put auth value in `authValue` (sent as HTTP header "AuthValue").
 4. Put encrypted API key in `apiKey`.
 5. Put request role in `userRole`.
 6. Put model name in `model`.
