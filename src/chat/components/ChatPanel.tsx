@@ -1,5 +1,29 @@
-import { Thread } from "@assistant-ui/react-ui";
+import {
+  Thread,
+  AssistantMessage,
+  BranchPicker,
+  AssistantActionBar,
+} from "@assistant-ui/react-ui";
+import { BotMessageSquare } from "lucide-react";
+import type { FC } from "react";
 import { WELCOME_MESSAGE, WELCOME_SUGGESTIONS } from "../defaults";
+
+/**
+ * Custom AssistantMessage that swaps the default "A" fallback avatar
+ * for a BotMessageSquare icon from lucide-react.
+ */
+const BotAssistantMessage: FC = () => (
+  <AssistantMessage.Root>
+    <div className="aui-avatar-root aui-assistant-avatar">
+      <div className="aui-avatar-fallback">
+        <BotMessageSquare size={20} aria-hidden="true" />
+      </div>
+    </div>
+    <AssistantMessage.Content />
+    <BranchPicker />
+    <AssistantActionBar />
+  </AssistantMessage.Root>
+);
 
 type ChatPanelProps = {
   isOpen: boolean;
@@ -42,6 +66,9 @@ export function ChatPanel(props: ChatPanelProps) {
 
       <div className="chat-panel__body chat-panel__body--thread">
         <Thread
+          components={{
+            AssistantMessage: BotAssistantMessage,
+          }}
           welcome={{
             message: WELCOME_MESSAGE,
             suggestions: [
