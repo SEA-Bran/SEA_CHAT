@@ -34,7 +34,7 @@ Last updated: 2026-04-22
 - **[V2] Init options changed: `request.*` replaced by `openaiApiKey`, `model`, `instructions`, `vectorStoreId`**
 - **[V2] Assistant-UI styles injected into Shadow DOM alongside widget CSS**
 - **[V2] Custom endpoint is prioritized when `endpointUrl` is provided**
-- **[V2] Custom endpoint now auto-uses `{ apiKey, userQuery, userRole, model }` request body**
+- **[V2] Custom endpoint now auto-uses `{ apiKey, userQuery, vectorStoreIds, model }` request body**
 - **[V2] Custom endpoint can also send one extra AJAX header via `authKey` + `authValue`**
 - **[V2] ApiResponse envelope handling (`Success`, `Message`, `Result`) documented and wired for endpoint flow**
 

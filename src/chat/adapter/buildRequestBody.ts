@@ -2,9 +2,37 @@ import type { MessageHistory } from "./types";
 
 type RequestTemplateContext = {
   apiKey: string;
-  userRole: string;
+  vectorStoreIds: string[];
   model: string;
 };
+
+const EXACT_PLACEHOLDER_PATTERN =
+  /^\{\{(message|prompt|userInput|userQuery|messages|apiKey|vectorStoreIds|model)\}\}$/;
+
+function getPlaceholderValue(
+  placeholder: string,
+  userText: string,
+  history: MessageHistory,
+  context: RequestTemplateContext,
+): unknown {
+  switch (placeholder) {
+    case "message":
+    case "prompt":
+    case "userInput":
+    case "userQuery":
+      return userText;
+    case "messages":
+      return history;
+    case "apiKey":
+      return context.apiKey;
+    case "vectorStoreIds":
+      return context.vectorStoreIds;
+    case "model":
+      return context.model;
+    default:
+      return "";
+  }
+}
 
 export function buildRequestBody(
   template: unknown,
@@ -14,11 +42,22 @@ export function buildRequestBody(
 ): unknown {
   const templateContext = context ?? {
     apiKey: "",
-    userRole: "user",
+    vectorStoreIds: [],
     model: "",
   };
 
   if (typeof template === "string") {
+    const exactPlaceholderMatch = template.match(EXACT_PLACEHOLDER_PATTERN);
+
+    if (exactPlaceholderMatch) {
+      return getPlaceholderValue(
+        exactPlaceholderMatch[1],
+        userText,
+        history,
+        templateContext,
+      );
+    }
+
     return template
       .replace(/\{\{message\}\}/g, userText)
       .replace(/\{\{prompt\}\}/g, userText)
@@ -26,7 +65,10 @@ export function buildRequestBody(
       .replace(/\{\{userQuery\}\}/g, userText)
       .replace(/\{\{messages\}\}/g, JSON.stringify(history))
       .replace(/\{\{apiKey\}\}/g, templateContext.apiKey)
-      .replace(/\{\{userRole\}\}/g, templateContext.userRole)
+      .replace(
+        /\{\{vectorStoreIds\}\}/g,
+        JSON.stringify(templateContext.vectorStoreIds),
+      )
       .replace(/\{\{model\}\}/g, templateContext.model);
   }
 

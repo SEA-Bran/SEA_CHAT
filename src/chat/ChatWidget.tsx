@@ -45,7 +45,7 @@ export function ChatWidget(props: ChatWidgetProps) {
         authValue: props.authValue,
         body: props.body,
         apiKey: props.apiKey,
-        userRole: props.userRole,
+        vectorStoreIds: props.vectorStoreIds,
         useCustomEndpointRequest: props.useCustomEndpointRequest,
         responsePath: props.responsePath,
         fallbackErrorMessage: props.fallbackErrorMessage,

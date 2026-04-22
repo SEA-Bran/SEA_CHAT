@@ -5,8 +5,13 @@ export function DemoPage() {
   const encryptedApiKey = import.meta.env.VITE_GENERAL_QUERY_API_KEY ?? "";
   const authKey = import.meta.env.VITE_GENERAL_QUERY_AUTH_KEY ?? "";
   const authValue = import.meta.env.VITE_GENERAL_QUERY_AUTH_VALUE ?? "";
-  const userRole = import.meta.env.VITE_GENERAL_QUERY_USER_ROLE ?? "user";
   const model = import.meta.env.VITE_GENERAL_QUERY_MODEL ?? "gpt-4.1";
+  const vectorStoreIds = (
+    import.meta.env.VITE_GENERAL_QUERY_VECTOR_STORE_IDS ?? ""
+  )
+    .split(",")
+    .map((value: string) => value.trim())
+    .filter(Boolean);
 
   return (
     <main className="app-shell">
@@ -41,7 +46,7 @@ export function DemoPage() {
         authKey={authKey}
         authValue={authValue}
         apiKey={encryptedApiKey}
-        userRole={userRole}
+        vectorStoreIds={vectorStoreIds}
         model={model}
         useCustomEndpointRequest
         responsePath="Result"

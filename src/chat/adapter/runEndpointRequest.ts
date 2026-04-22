@@ -16,7 +16,7 @@ export async function runEndpointRequest(
   const method = options.method ?? "POST";
   const hasCustomEndpointConfig =
     options.apiKey !== undefined ||
-    options.userRole !== undefined ||
+    options.vectorStoreIds !== undefined ||
     options.model !== undefined;
   const useCustomEndpointRequest =
     options.useCustomEndpointRequest ?? hasCustomEndpointConfig;
@@ -29,7 +29,7 @@ export async function runEndpointRequest(
       responseBody = {
         apiKey: options.apiKey ?? "",
         userQuery: userText,
-        userRole: options.userRole ?? "user",
+        vectorStoreIds: options.vectorStoreIds ?? [],
         model: options.model ?? "",
       };
     } else {
@@ -40,7 +40,7 @@ export async function runEndpointRequest(
     // Fill in any {{message}} or {{messages}} placeholders in the custom body
     responseBody = buildRequestBody(responseBody, userText, history, {
       apiKey: options.apiKey ?? "",
-      userRole: options.userRole ?? "user",
+      vectorStoreIds: options.vectorStoreIds ?? [],
       model: options.model ?? "",
     });
   }

@@ -64,7 +64,7 @@ function init(options: SeaChatWidgetOptions = {}): SeaChatWidgetInstance {
     authValue: options.authValue,
     body: options.body,
     apiKey: options.apiKey,
-    userRole: options.userRole,
+    vectorStoreIds: options.vectorStoreIds,
     useCustomEndpointRequest: options.useCustomEndpointRequest,
     responsePath: options.responsePath,
     fallbackErrorMessage: options.fallbackErrorMessage,

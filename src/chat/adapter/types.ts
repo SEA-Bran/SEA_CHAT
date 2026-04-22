@@ -15,7 +15,7 @@ export type EndpointOptions = {
   authValue?: string;
   body?: unknown;
   apiKey?: string;
-  userRole?: string;
+  vectorStoreIds?: string[];
   model?: string;
   useCustomEndpointRequest?: boolean;
   responsePath?: string;

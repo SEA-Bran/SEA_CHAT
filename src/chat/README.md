@@ -272,7 +272,7 @@ For custom links, endpoint requests default to:
 {
   "apiKey": "...",
   "userQuery": "latest user text",
-  "userRole": "user",
+  "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1"
 }
 ```
@@ -288,7 +288,7 @@ If you pass `body`, the adapter keeps using your custom payload, with support fo
 - `{{message}}` / `{{prompt}}` / `{{userInput}}` / `{{userQuery}}`
 - `{{messages}}`
 - `{{apiKey}}`
-- `{{userRole}}`
+- `{{vectorStoreIds}}`
 - `{{model}}`
 
 If you want to disable this automatic custom-endpoint body behavior, set `useCustomEndpointRequest: false`.

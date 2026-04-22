@@ -101,7 +101,7 @@ For custom links, the widget auto-uses this request body when `body` is not prov
 {
   "apiKey": "string",
   "userQuery": "string",
-  "userRole": "string",
+  "vectorStoreIds": ["string"],
   "model": "string"
 }
 ```
@@ -115,7 +115,7 @@ configure the widget like this:
   authKey="your-auth-key-value"
   authValue="your-auth-value"
   apiKey="<encrypted-api-key>"
-  userRole="user"
+  vectorStoreIds={["vs_support_docs"]}
   model="gpt-4.1"
   responsePath="Result"
   fallbackErrorMessage="Unable to reach assistant right now."
@@ -133,7 +133,10 @@ React:
   authKey={import.meta.env.VITE_GENERAL_QUERY_AUTH_KEY}
   authValue={import.meta.env.VITE_GENERAL_QUERY_AUTH_VALUE}
   apiKey={import.meta.env.VITE_GENERAL_QUERY_API_KEY}
-  userRole={import.meta.env.VITE_GENERAL_QUERY_USER_ROLE ?? "user"}
+  vectorStoreIds={(import.meta.env.VITE_GENERAL_QUERY_VECTOR_STORE_IDS ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean)}
   model={import.meta.env.VITE_GENERAL_QUERY_MODEL ?? "gpt-4.1"}
   responsePath="Result"
   fallbackErrorMessage="Unable to get query response from API."
@@ -151,7 +154,7 @@ Plain HTML:
     authKey: "your-auth-key-value",
     authValue: "your-auth-value",
     apiKey: "<encrypted-api-key>",
-    userRole: "user",
+    vectorStoreIds: ["vs_support_docs"],
     model: "gpt-4.1",
     responsePath: "Result",
     fallbackErrorMessage: "Unable to get query response from API.",
@@ -163,7 +166,7 @@ Plain HTML:
 
 1. Set `endpointUrl` to your `GetQueryResponse` API.
 2. Set `authKey` and `authValue` if your API requires authentication headers.
-3. Set `apiKey`, `userRole`, and `model`.
+3. Set `apiKey`, `vectorStoreIds`, and `model`.
 4. Set `responsePath` to `Result`.
 
 If `authKey` and `authValue` are provided, the widget sends two separate headers:
@@ -179,7 +182,7 @@ You can now chat immediately. Each user message is sent as:
 {
   "apiKey": "<encrypted-api-key>",
   "userQuery": "<latest user message>",
-  "userRole": "user",
+  "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1"
 }
 ```
@@ -187,19 +190,19 @@ You can now chat immediately. Each user message is sent as:
 The widget sends this JSON body by default when:
 
 - `endpointUrl` is provided, or
-- `apiKey`, `userRole`, or `model` are provided, or
+- `apiKey`, `vectorStoreIds`, or `model` are provided, or
 - `useCustomEndpointRequest: true` is set.
 
 ```json
 {
   "apiKey": "<encrypted-api-key>",
   "userQuery": "<latest user message>",
-  "userRole": "user",
+  "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1"
 }
 ```
 
-You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{userRole}}`, and `{{model}}`.
+You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{vectorStoreIds}}`, and `{{model}}`.
 
 To force a different behavior, set `useCustomEndpointRequest: false`.
 

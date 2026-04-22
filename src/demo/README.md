@@ -111,7 +111,7 @@ For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest re
   authKey="your-auth-key-value"
   authValue="your-auth-value"
   apiKey="<encrypted-api-key>"
-  userRole="user"
+  vectorStoreIds={["vs_support_docs"]}
   model="gpt-4.1"
   responsePath="Result"
   assistantName="My API"
@@ -124,7 +124,7 @@ Simple setup:
 2. If needed, put auth key value in `authKey` (sent as HTTP header "AuthKey").
 3. If needed, put auth value in `authValue` (sent as HTTP header "AuthValue").
 4. Put encrypted API key in `apiKey`.
-5. Put request role in `userRole`.
+5. Put vector store IDs in `vectorStoreIds`.
 6. Put model name in `model`.
 7. Keep `responsePath="Result"`.
 
@@ -136,7 +136,7 @@ Default request body sent by the widget in this mode:
 {
   "apiKey": "<encrypted-api-key>",
   "userQuery": "<user text>",
-  "userRole": "user",
+  "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1"
 }
 ```
