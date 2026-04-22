@@ -259,6 +259,32 @@ Returns: {
 
 Used to extract the response text from your API response.
 
+#### ASP.NET `GeneralQueryRequest` support
+
+When you pass `apiKey` and/or `assistantId`, endpoint requests default to:
+
+```json
+{
+  "ApiKey": "...",
+  "UserQuery": "latest user text",
+  "AssistantId": "..."
+}
+```
+
+This matches a backend action like:
+
+```csharp
+[HttpPost(nameof(GetQueryResponse))]
+public async Task<ActionResult> GetQueryResponse([FromBody] GeneralQueryRequest req) { }
+```
+
+If you pass `body`, the adapter keeps using your custom payload, with support for placeholders:
+
+- `{{message}}` / `{{prompt}}` / `{{userInput}}` / `{{userQuery}}`
+- `{{messages}}`
+- `{{apiKey}}`
+- `{{assistantId}}`
+
 ### `adapter/types.ts`
 
 **Types just for the adapter.** Keeps adapter-specific types separate.

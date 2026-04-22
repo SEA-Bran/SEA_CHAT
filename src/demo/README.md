@@ -102,6 +102,29 @@ Instead of OpenAI:
 <ChatWidget endpointUrl="https://your-api.com/chat" assistantName="My API" />
 ```
 
+For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest req)`, use:
+
+```tsx
+<ChatWidget
+  endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
+  method="POST"
+  apiKey="<encrypted-api-key>"
+  assistantId="assistant-001"
+  responsePath="Result"
+  assistantName="My API"
+/>
+```
+
+Default request body sent by the widget in this mode:
+
+```json
+{
+  "ApiKey": "<encrypted-api-key>",
+  "UserQuery": "<user text>",
+  "AssistantId": "assistant-001"
+}
+```
+
 ## Styling the Demo Page
 
 The demo page has its own styles in `src/App.css`. The widget has its own styles in `src/widget.css`.

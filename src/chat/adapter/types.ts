@@ -12,6 +12,9 @@ export type EndpointOptions = {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   headers?: Record<string, string>;
   body?: unknown;
+  apiKey?: string;
+  assistantId?: string;
+  useGeneralQueryRequest?: boolean;
   responsePath?: string;
   fallbackErrorMessage?: string;
 };

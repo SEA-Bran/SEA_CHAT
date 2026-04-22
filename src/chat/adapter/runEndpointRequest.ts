@@ -14,16 +14,31 @@ export async function runEndpointRequest(
 
   // "const" = these values are set once and never changed
   const method = options.method ?? "POST";
+  const hasGeneralQueryConfig =
+    options.apiKey !== undefined || options.assistantId !== undefined;
+  const useGeneralQueryRequest =
+    options.useGeneralQueryRequest ?? hasGeneralQueryConfig;
 
   // "let" = responseBody may be replaced below if the user provided a template
   let responseBody = options.body;
 
   if (responseBody === undefined) {
-    // No custom body provided — use a simple default with the user's message
-    responseBody = { message: userText, prompt: userText };
+    if (useGeneralQueryRequest) {
+      responseBody = {
+        ApiKey: options.apiKey ?? "",
+        UserQuery: userText,
+        AssistantId: options.assistantId ?? "",
+      };
+    } else {
+      // No custom body provided — use a simple default with the user's message
+      responseBody = { message: userText, prompt: userText };
+    }
   } else {
     // Fill in any {{message}} or {{messages}} placeholders in the custom body
-    responseBody = buildRequestBody(responseBody, userText, history);
+    responseBody = buildRequestBody(responseBody, userText, history, {
+      apiKey: options.apiKey ?? "",
+      assistantId: options.assistantId ?? "",
+    });
   }
 
   // "let" = url may have query params added to the end (for GET requests)
@@ -90,6 +105,35 @@ export async function runEndpointRequest(
     }
 
     return text;
+  }
+
+  if (useGeneralQueryRequest && json && typeof json === "object") {
+    const apiResponse = json as Record<string, unknown>;
+    const success = apiResponse.Success;
+    const message = apiResponse.Message;
+    const result = apiResponse.Result;
+
+    if (success === false) {
+      if (typeof message === "string" && message.length > 0) {
+        throw new Error(message);
+      }
+
+      throw new Error("Endpoint returned Success=false");
+    }
+
+    if (typeof result === "string") {
+      return result;
+    }
+
+    if (result === null || result === undefined) {
+      if (typeof message === "string" && message.length > 0) {
+        throw new Error(message);
+      }
+
+      throw new Error("Endpoint response Result is empty");
+    }
+
+    return String(result);
   }
 
   if (typeof json === "string") {

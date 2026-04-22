@@ -1,6 +1,10 @@
 import { ChatWidget } from "../chat/ChatWidget";
 
 export function DemoPage() {
+  const endpointUrl = import.meta.env.VITE_GENERAL_QUERY_ENDPOINT_URL ?? "";
+  const encryptedApiKey = import.meta.env.VITE_GENERAL_QUERY_API_KEY ?? "";
+  const assistantId = import.meta.env.VITE_GENERAL_QUERY_ASSISTANT_ID ?? "";
+
   return (
     <main className="app-shell">
       <section className="page-preview" aria-label="Demo page preview">
@@ -29,9 +33,13 @@ export function DemoPage() {
       </section>
 
       <ChatWidget
-        openaiApiKey={import.meta.env.VITE_OPENAI_API_KEY ?? ""}
-        model="gpt-4.1"
-        instructions="You are a helpful SEA support assistant. Be concise and professional."
+        endpointUrl={endpointUrl}
+        method="POST"
+        apiKey={encryptedApiKey}
+        assistantId={assistantId}
+        useGeneralQueryRequest
+        responsePath="Result"
+        fallbackErrorMessage="Unable to get query response from API."
       />
     </main>
   );

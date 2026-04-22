@@ -91,6 +91,55 @@ export function MyPage() {
 }
 ```
 
+### Use a Custom ASP.NET Endpoint (`GetQueryResponse`)
+
+If your backend exposes this endpoint:
+
+```csharp
+[HttpPost(nameof(GetQueryResponse))]
+public async Task<ActionResult> GetQueryResponse([FromBody] GeneralQueryRequest req) { }
+```
+
+and expects:
+
+```csharp
+public class GeneralQueryRequest : BaseRequest
+{
+    public string UserQuery { get; set; } = string.Empty;
+    public string AssistantId { get; set; } = string.Empty;
+}
+
+public class BaseRequest
+{
+    public string ApiKey { get; set; }
+}
+```
+
+configure the widget like this:
+
+```tsx
+<ChatWidget
+  endpointUrl="https://your-api-host/api/Chat/GetQueryResponse"
+  method="POST"
+  apiKey="<encrypted-api-key>"
+  assistantId="assistant-001"
+  responsePath="Result"
+  fallbackErrorMessage="Unable to reach assistant right now."
+/>
+```
+
+The widget sends this JSON body by default when `apiKey` and/or `assistantId` are provided:
+
+```json
+{
+  "ApiKey": "<encrypted-api-key>",
+  "UserQuery": "<latest user message>",
+  "AssistantId": "assistant-001"
+}
+```
+
+You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, and `{{assistantId}}`.
+
 ## Multi-Turn Conversations
 
 The widget automatically supports multi-turn conversations — **the assistant remembers your entire chat history and can refer back to previous messages.**
