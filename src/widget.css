@@ -4,6 +4,7 @@
   --sea-surface: #fff7f8;
   --sea-accent-a: #dc2626;
   --sea-accent-b: #be123c;
+  --sea-accent-c: #7f1d1d;
   --sea-line: rgba(220, 38, 38, 0.2);
   position: fixed;
   right: 22px;
@@ -28,9 +29,9 @@
   margin-bottom: 14px;
   border-radius: 26px;
   border: 1px solid var(--sea-line);
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff 0%, #fff8f8 100%);
   box-shadow:
-    0 24px 60px rgba(122, 20, 33, 0.22),
+    0 28px 70px rgba(122, 20, 33, 0.26),
     inset 0 1px 0 rgba(255, 255, 255, 0.85);
   overflow: hidden;
   transform: translateY(18px) scale(0.96);
@@ -52,7 +53,20 @@
     rgba(255, 255, 255, 0) 57%
   );
   transform: translateX(-130%);
-  animation: none;
+  animation: sea-panel-sheen 9s ease-in-out infinite;
+  opacity: 0.45;
+}
+
+.sea-chat-widget .chat-panel::before {
+  content: "";
+  position: absolute;
+  inset: -30% -40% auto;
+  height: 55%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(251, 113, 133, 0.24), transparent 52%),
+    radial-gradient(circle at 70% 30%, rgba(244, 63, 94, 0.16), transparent 58%);
+  z-index: 0;
 }
 
 .sea-chat-widget .chat-panel--open {
@@ -62,12 +76,17 @@
 }
 
 .sea-chat-widget .chat-panel__header {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 14px;
   padding: 18px 18px 14px;
-  background: #dc2626;
+  background:
+    radial-gradient(circle at 88% 20%, rgba(255, 255, 255, 0.22), transparent 32%),
+    linear-gradient(125deg, var(--sea-accent-a) 0%, var(--sea-accent-b) 54%, var(--sea-accent-c) 100%);
+  backdrop-filter: blur(6px);
   border-bottom: none;
 }
 
@@ -133,6 +152,8 @@
 }
 
 .sea-chat-widget .chat-panel__body--thread {
+  position: relative;
+  z-index: 1;
   padding: 0;
   overflow: hidden;
   display: flex;
@@ -144,7 +165,9 @@
 /* assistant-ui overrides */
 .sea-chat-widget .aui-thread-root {
   height: 100%;
-  background: #ffffff;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 251, 252, 0.96)),
+    radial-gradient(circle at 18% 14%, rgba(252, 165, 165, 0.2), transparent 45%);
   --aui-background: 0 0% 100%;
   --aui-foreground: 344 35% 14%;
   --aui-muted-foreground: 345 25% 42%;
@@ -154,11 +177,12 @@
 .sea-chat-widget .aui-thread-viewport {
   padding: 18px 16px 14px;
   scrollbar-width: thin;
+  scrollbar-color: rgba(190, 18, 60, 0.35) transparent;
 }
 
 .sea-chat-widget .aui-thread-welcome-root {
   border-radius: 18px;
-  padding: 8px 2px;
+  padding: 8px 2px 6px;
 }
 
 .sea-chat-widget .aui-thread-welcome-message {
@@ -176,7 +200,8 @@
 .sea-chat-widget .aui-thread-welcome-suggestion {
   border: 1px solid rgba(220, 38, 38, 0.2);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 22px rgba(122, 20, 33, 0.08);
   transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
 }
 
@@ -193,44 +218,47 @@
 
 .sea-chat-widget .aui-assistant-message-root,
 .sea-chat-widget .aui-user-message-root {
-  margin-bottom: 12px;
+  margin-bottom: 13px;
+  animation: sea-bubble-in 230ms ease;
 }
 
 .sea-chat-widget .aui-assistant-message-content,
 .sea-chat-widget .aui-user-message-content {
-  border-radius: 16px;
-  padding: 12px 14px;
+  border-radius: 18px;
+  padding: 12px 15px;
   line-height: 1.62;
-  box-shadow: 0 9px 22px rgba(122, 20, 33, 0.12);
+  box-shadow: 0 12px 26px rgba(122, 20, 33, 0.12);
 }
 
 .sea-chat-widget .aui-assistant-message-content {
+  border-top-left-radius: 10px;
   border: 1px solid rgba(220, 38, 38, 0.16);
-  background: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 249, 0.95));
   color: #32151b;
 }
 
 .sea-chat-widget .aui-user-message-content {
-  background: linear-gradient(132deg, #dc2626 0%, #be123c 110%);
+  border-top-right-radius: 10px;
+  background: linear-gradient(132deg, #dc2626 0%, #be123c 68%, #881337 110%);
   color: #fff6f7;
 }
 
 .sea-chat-widget .aui-thread-viewport-footer {
-  padding: 10px 12px 12px;
-  background: #ffffff;
+  padding: 12px 12px 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 1));
 }
 
 .sea-chat-widget .aui-composer-root {
   border: 1px solid rgba(220, 38, 38, 0.18);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 10px 24px rgba(122, 20, 33, 0.14);
-  padding: 7px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 14px 30px rgba(122, 20, 33, 0.14);
+  padding: 8px;
 }
 
 .sea-chat-widget .aui-composer-root:focus-within {
   border-color: rgba(220, 38, 38, 0.3);
-  box-shadow: 0 10px 24px rgba(122, 20, 33, 0.14);
+  box-shadow: 0 16px 34px rgba(122, 20, 33, 0.18);
 }
 
 .sea-chat-widget .aui-composer-input {
@@ -251,14 +279,15 @@
 }
 
 .sea-chat-widget .aui-composer-send {
-  border-radius: 11px;
+  border-radius: 12px;
   border: 0;
-  background: linear-gradient(135deg, var(--sea-accent-a), var(--sea-accent-b));
+  background: linear-gradient(135deg, var(--sea-accent-a), var(--sea-accent-b), var(--sea-accent-c));
   color: #fff6f7;
+  box-shadow: 0 10px 18px rgba(159, 18, 57, 0.28);
 }
 
 .sea-chat-widget .aui-composer-send:hover {
-  filter: brightness(1.05);
+  filter: brightness(1.07);
 }
 
 .sea-chat-widget .aui-composer-cancel {
@@ -312,6 +341,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.9);
   color: #8f1f2c;
+  box-shadow: 0 10px 18px rgba(122, 20, 33, 0.12);
 }
 
 .sea-chat-widget .launcher {
@@ -323,7 +353,9 @@
   padding: 15px 18px;
   border-radius: 999px;
   border: 1px solid rgba(220, 38, 38, 0.35);
-  background: linear-gradient(136deg, #dc2626 0%, #be123c 58%, #9f1239 100%);
+  background:
+    radial-gradient(circle at 22% 15%, rgba(255, 255, 255, 0.26), transparent 30%),
+    linear-gradient(136deg, #dc2626 0%, #be123c 58%, #9f1239 100%);
   color: #fff3f5;
   box-shadow: 0 18px 40px rgba(126, 20, 35, 0.42);
   transition: transform 180ms ease, box-shadow 180ms ease;
@@ -336,7 +368,9 @@
 }
 
 .sea-chat-widget .launcher--active {
-  background: linear-gradient(136deg, #991b1b 0%, #9f1239 100%);
+  background:
+    radial-gradient(circle at 22% 15%, rgba(255, 255, 255, 0.18), transparent 30%),
+    linear-gradient(136deg, #991b1b 0%, #9f1239 100%);
 }
 
 .sea-chat-widget .launcher__icon {
@@ -359,6 +393,7 @@
   border-radius: 999px;
   background: #fca5a5;
   box-shadow: 0 0 0 4px rgba(252, 165, 165, 0.25);
+  animation: sea-pulse 2.2s ease-in-out infinite;
 }
 
 .sea-chat-widget button:focus-visible,
@@ -379,6 +414,31 @@
   }
 }
 
+@keyframes sea-bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sea-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+
+  50% {
+    transform: scale(1.24);
+    opacity: 0.62;
+  }
+}
+
 @media (max-width: 640px) {
   .sea-chat-widget {
     right: 12px;
@@ -388,7 +448,7 @@
 
   .sea-chat-widget .chat-panel {
     width: 100%;
-    height: min(80vh, 700px);
+    height: min(82vh, 700px);
     transform-origin: bottom center;
   }
 
