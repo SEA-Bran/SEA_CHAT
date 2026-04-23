@@ -137,7 +137,12 @@ Default request body sent by the widget in this mode:
   "apiKey": "<encrypted-api-key>",
   "userQuery": "<user text>",
   "vectorStoreIds": ["vs_support_docs"],
-  "model": "gpt-4.1"
+  "model": "gpt-4.1",
+  "conversationHistory": [
+    { "Role": "user", "Content": "<older message>" },
+    { "Role": "assistant", "Content": "<older reply>" },
+    { "Role": "user", "Content": "<user text>" }
+  ]
 }
 ```
 

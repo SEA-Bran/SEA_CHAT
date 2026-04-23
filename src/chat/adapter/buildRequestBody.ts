@@ -6,8 +6,24 @@ type RequestTemplateContext = {
   model: string;
 };
 
+type ConversationHistoryItem = {
+  Role: string;
+  Content: string;
+};
+
+function toConversationHistory(
+  history: MessageHistory,
+): ConversationHistoryItem[] {
+  return history.map(function (message) {
+    return {
+      Role: message.role,
+      Content: message.text,
+    };
+  });
+}
+
 const EXACT_PLACEHOLDER_PATTERN =
-  /^\{\{(message|prompt|userInput|userQuery|messages|apiKey|vectorStoreIds|model)\}\}$/;
+  /^\{\{(message|prompt|userInput|userQuery|messages|conversationHistory|apiKey|vectorStoreIds|model)\}\}$/;
 
 function getPlaceholderValue(
   placeholder: string,
@@ -23,6 +39,8 @@ function getPlaceholderValue(
       return userText;
     case "messages":
       return history;
+    case "conversationHistory":
+      return toConversationHistory(history);
     case "apiKey":
       return context.apiKey;
     case "vectorStoreIds":
@@ -64,6 +82,10 @@ export function buildRequestBody(
       .replace(/\{\{userInput\}\}/g, userText)
       .replace(/\{\{userQuery\}\}/g, userText)
       .replace(/\{\{messages\}\}/g, JSON.stringify(history))
+      .replace(
+        /\{\{conversationHistory\}\}/g,
+        JSON.stringify(toConversationHistory(history)),
+      )
       .replace(/\{\{apiKey\}\}/g, templateContext.apiKey)
       .replace(
         /\{\{vectorStoreIds\}\}/g,

@@ -102,7 +102,11 @@ For custom links, the widget auto-uses this request body when `body` is not prov
   "apiKey": "string",
   "userQuery": "string",
   "vectorStoreIds": ["string"],
-  "model": "string"
+  "model": "string",
+  "conversationHistory": [
+    { "Role": "user", "Content": "string" },
+    { "Role": "assistant", "Content": "string" }
+  ]
 }
 ```
 
@@ -183,7 +187,12 @@ You can now chat immediately. Each user message is sent as:
   "apiKey": "<encrypted-api-key>",
   "userQuery": "<latest user message>",
   "vectorStoreIds": ["vs_support_docs"],
-  "model": "gpt-4.1"
+  "model": "gpt-4.1",
+  "conversationHistory": [
+    { "Role": "user", "Content": "<older message>" },
+    { "Role": "assistant", "Content": "<older reply>" },
+    { "Role": "user", "Content": "<latest user message>" }
+  ]
 }
 ```
 
@@ -198,11 +207,16 @@ The widget sends this JSON body by default when:
   "apiKey": "<encrypted-api-key>",
   "userQuery": "<latest user message>",
   "vectorStoreIds": ["vs_support_docs"],
-  "model": "gpt-4.1"
+  "model": "gpt-4.1",
+  "conversationHistory": [
+    { "Role": "user", "Content": "<older message>" },
+    { "Role": "assistant", "Content": "<older reply>" },
+    { "Role": "user", "Content": "<latest user message>" }
+  ]
 }
 ```
 
-You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{vectorStoreIds}}`, and `{{model}}`.
+You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{vectorStoreIds}}`, `{{model}}`, and `{{conversationHistory}}`.
 
 To force a different behavior, set `useCustomEndpointRequest: false`.
 

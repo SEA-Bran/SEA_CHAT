@@ -31,6 +31,12 @@ export async function runEndpointRequest(
         userQuery: userText,
         vectorStoreIds: options.vectorStoreIds ?? [],
         model: options.model ?? "",
+        conversationHistory: history.map(function (message) {
+          return {
+            Role: message.role,
+            Content: message.text,
+          };
+        }),
       };
     } else {
       // No custom body provided — use a simple default with the user's message

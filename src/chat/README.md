@@ -221,7 +221,7 @@ Uses basic `fetch()` and reads streaming JSON events.
 **Calls your own backend API.** It:
 
 - Takes your endpoint URL
-- Builds the request body (can substitute `{{message}}`, `{{messages}}`, etc.)
+- Builds the request body (can substitute `{{message}}`, `{{messages}}`, `{{conversationHistory}}`, etc.)
 - Sends it with GET or POST
 - Extracts the response using `responsePath` (JSON path like `data.text`)
 
@@ -233,6 +233,7 @@ Useful if you want to hide your API key or add custom logic on your server.
 
 - Takes a template (string, object, or array)
 - Replaces placeholders like `{{message}}` with the actual user text
+- Supports `{{conversationHistory}}` in API format (`[{ Role, Content }]`) for multi-turn backend contracts
 - Recursively handles nested objects
 - Returns the filled-in template
 
