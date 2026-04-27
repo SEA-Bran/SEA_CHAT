@@ -8,6 +8,10 @@ import { runOpenAIRequest } from "./runOpenAIRequest";
 
 export type { OpenAIResponsesAdapterOptions } from "./types";
 
+// Maximum conversation history to keep on client. Server can maintain its own state
+// via previous_response_id, so we only keep recent turns as a fallback.
+const MAX_HISTORY_LENGTH = 10;
+
 export function createOpenAIResponsesAdapter(
   options: OpenAIResponsesAdapterOptions,
 ): ResettableChatModelAdapter {
@@ -78,8 +82,9 @@ export function createOpenAIResponsesAdapter(
           const endpointText = await runEndpointRequest(
             options,
             userText,
-            history,
+            history.slice(-MAX_HISTORY_LENGTH),
             args.abortSignal,
+            state,
           );
 
           return {

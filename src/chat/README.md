@@ -75,29 +75,66 @@ ChatWidget (isOpen state)
         └─ Button that toggles isOpen
 ```
 
-### 5. Multi-Turn Conversations (OpenAI memory)
+### 5. Multi-Turn Conversations (Server-Side Memory)
 
-When using OpenAI's API, the widget automatically tracks conversation context:
+⚠️ **Architecture Change**: Previously, we sent the full conversation history on every turn. Now we use `previous_response_id` for efficient multi-turn support.
+
+#### **What Changed:**
+
+| Aspect       | Old                                    | New                            |
+| ------------ | -------------------------------------- | ------------------------------ |
+| **Cost**     | Every turn paid for all previous turns | Each turn billed once          |
+| **Security** | Full history = injection surface       | Only current message sent      |
+| **Quality**  | Concatenated string                    | Server structures conversation |
+
+#### **How It Works:**
 
 ```
 Message 1: "What are your hours?"
     ↓
-OpenAI response → saves response_id "resp_001"
+API response → saves response_id "resp_001"
     ↓
 Message 2: "Are you open on Sundays?"
     ↓
-runOpenAIRequest sends: { input: "...", previous_response_id: "resp_001" }
+runEndpointRequest/runOpenAIRequest sends:
+  { userQuery: "...", previousResponseId: "resp_001" }
     ↓
-OpenAI remembers context → gives relevant answer
+API remembers context from resp_001 → gives relevant answer
     ↓
 (repeats for every message)
 ```
 
-**Why this matters:** The assistant can refer back to earlier messages. Example:
+**Why this matters:** The assistant can refer back to earlier messages:
 
 - User: "I want the Pro plan"
 - Assistant: "Great choice! The Pro plan includes..."
-- User: "Tell me more about the support" (support = from the Pro plan the user mentioned)
+- User: "Tell me more about the support" (support = from the Pro plan mentioned earlier)
+
+#### **Client-Side History Cap:**
+
+While the server maintains full conversation state via `previous_response_id`, the widget keeps only the last 10 messages (`MAX_HISTORY_LENGTH`) on the client as a fallback. This prevents unbounded memory growth while the server handles the real conversation history.
+
+If you need custom history behavior, pass `{{conversationHistory}}` in your custom body template.
+
+#### **For Your Backend:**
+
+1. **Receive** `previousResponseId` in the request body
+2. **Look up** the previous conversation state using that ID
+3. **Use it** to provide context (or ignore if stateless)
+4. **Return** the new response (and include `previousResponseId` field in your response if you want the widget to track it)
+
+The widget will automatically store and resend `previousResponseId` on the next message.
+
+#### **For Your Frontend:**
+
+If you're integrating the widget, just pass your API key and URL:
+
+```tsx
+<ChatWidget endpointUrl="https://your-api.com/chat" apiKey="sk_your_key" />
+```
+
+The widget handles conversation memory automatically.
+
 - Assistant: "The Pro plan includes 24/7 email support..."
 
 This works because we save the response ID and send it with every subsequent request.

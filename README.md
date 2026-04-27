@@ -95,7 +95,7 @@ export function MyPage() {
 
 Simple rule: if `endpointUrl` is set, the widget uses your custom endpoint first.
 
-For custom links, the widget auto-uses this request body when `body` is not provided:
+For custom endpoints, the widget auto-uses this request body when `body` is not provided:
 
 ```json
 {
@@ -103,12 +103,23 @@ For custom links, the widget auto-uses this request body when `body` is not prov
   "userQuery": "string",
   "vectorStoreIds": ["string"],
   "model": "string",
-  "conversationHistory": [
-    { "Role": "user", "Content": "string" },
-    { "Role": "assistant", "Content": "string" }
-  ]
+  "previousResponseId": "string"
 }
 ```
+
+**Key improvements** over the old concatenated history approach:
+
+- **Cost**: Each turn is billed once. Previously, turn 20 would pay for turns 1–19 again.
+- **Security**: Only the current user message is sent. Eliminates prompt injection from history.
+- **Quality**: Your endpoint can structure messages properly instead of parsing concatenated strings.
+
+#### How Your Backend Should Handle It:
+
+1. **Receive** `userQuery` and `previousResponseId` from the widget
+2. **Look up** any previous conversation state using `previousResponseId` (or ignore if stateless)
+3. **Return** the response (and optionally include `previousResponseId` in your response if you want multi-turn support)
+
+The widget will automatically track `previousResponseId` for the next message.
 
 configure the widget like this:
 
@@ -188,13 +199,14 @@ You can now chat immediately. Each user message is sent as:
   "userQuery": "<latest user message>",
   "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1",
-  "conversationHistory": [
-    { "Role": "user", "Content": "<older message>" },
-    { "Role": "assistant", "Content": "<older reply>" },
-    { "Role": "user", "Content": "<latest user message>" }
-  ]
+  "previousResponseId": "resp_abc123"
 }
 ```
+
+**Note**: Only the current message is sent. If this is the first message in the conversation, `previousResponseId` will be absent. Your backend should:
+
+- **First message**: Treat it as a fresh conversation start
+- **Subsequent messages**: Use `previousResponseId` to look up the conversation context and maintain state
 
 The widget sends this JSON body by default when:
 
@@ -202,44 +214,46 @@ The widget sends this JSON body by default when:
 - `apiKey`, `vectorStoreIds`, or `model` are provided, or
 - `useCustomEndpointRequest: true` is set.
 
-```json
-{
-  "apiKey": "<encrypted-api-key>",
-  "userQuery": "<latest user message>",
-  "vectorStoreIds": ["vs_support_docs"],
-  "model": "gpt-4.1",
-  "conversationHistory": [
-    { "Role": "user", "Content": "<older message>" },
-    { "Role": "assistant", "Content": "<older reply>" },
-    { "Role": "user", "Content": "<latest user message>" }
-  ]
-}
-```
+You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{vectorStoreIds}}`, `{{model}}`, `{{previousResponseId}}`, and `{{conversationHistory}}`.
 
-You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{vectorStoreIds}}`, `{{model}}`, and `{{conversationHistory}}`.
+**Important**: If you use `{{conversationHistory}}` in your custom template, the widget will send the full recent history (capped at 10 messages) for backwards compatibility. For new implementations, use `{{previousResponseId}}` instead for better cost and security.
 
 To force a different behavior, set `useCustomEndpointRequest: false`.
 
 ## Multi-Turn Conversations
 
-The widget automatically supports multi-turn conversations — **the assistant remembers your entire chat history and can refer back to previous messages.**
+The widget automatically supports multi-turn conversations using the `previous_response_id` pattern — **the assistant remembers your entire chat history via server-side state.**
+
+### Why This Matters
+
+**Old approach** (full history concatenation):
+
+- ❌ Turn 20 = pay for turns 1–19 again
+- ❌ Full history = prompt injection surface
+- ❌ Concatenated string = weak multi-turn quality
+
+**New approach** (`previous_response_id`):
+
+- ✅ Each turn billed once
+- ✅ Only current message sent (minimal injection surface)
+- ✅ Server maintains conversation state properly
 
 ### How It Works
 
 1. **User sends message 1** — "What are your pricing plans?"
-2. **OpenAI responds** — saves a `response_id` internally
+2. **OpenAI/Your API responds** — returns a `previousResponseId` or stores one internally
 3. **User sends message 2** — "Tell me more about the Pro plan"
-4. **Widget sends the `response_id` from message 1** → OpenAI knows the context and gives a relevant answer
-5. **Repeats for every message** — the full conversation stays in memory
+4. **Widget sends `previousResponseId` from message 1** → API knows the context and gives a relevant answer
+5. **Repeats for every message** — full conversation stays in memory server-side
 
 This is built in and **happens automatically**. You don't need to do anything — just use the widget normally.
 
 ### Under the Hood
 
 - The `ChatWidget.tsx` creates a single adapter instance that lives for the entire widget lifetime (using `useMemo`)
-- The adapter tracks `previousResponseId` (the ID from OpenAI's last response)
-- Every API call includes `previous_response_id` so OpenAI knows the context
-- See [src/chat/adapter/runOpenAIRequest.ts](src/chat/adapter/runOpenAIRequest.ts) lines 35–36 for the implementation
+- The adapter tracks `previousResponseId` (from OpenAI's Responses API or your custom endpoint)
+- Every API call includes `previousResponseId` so the server knows the context
+- See [src/chat/adapter/runOpenAIRequest.ts](src/chat/adapter/runOpenAIRequest.ts) lines 35–37 and [src/chat/adapter/runEndpointRequest.ts](src/chat/adapter/runEndpointRequest.ts) lines 34–45 for the implementation
 
 ### Reset Conversation
 

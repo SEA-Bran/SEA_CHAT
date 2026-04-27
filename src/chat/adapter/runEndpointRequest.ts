@@ -2,11 +2,16 @@ import { buildRequestBody } from "./buildRequestBody";
 import { resolvePath } from "./resolvePath";
 import type { EndpointOptions, MessageHistory } from "./types";
 
+type EndpointRequestState = {
+  previousResponseId: string | null;
+};
+
 export async function runEndpointRequest(
   options: EndpointOptions,
   userText: string,
   history: MessageHistory,
   abortSignal: AbortSignal,
+  state: EndpointRequestState,
 ): Promise<string> {
   if (!options.endpointUrl) {
     throw new Error("endpointUrl is required");
@@ -26,18 +31,22 @@ export async function runEndpointRequest(
 
   if (responseBody === undefined) {
     if (useCustomEndpointRequest) {
+      // Build the default request body with previous_response_id for multi-turn support
+      // Only send the current user message, not the full history (conversation state is
+      // maintained server-side via previous_response_id, improving cost and security)
       responseBody = {
         apiKey: options.apiKey ?? "",
         userQuery: userText,
         vectorStoreIds: options.vectorStoreIds ?? [],
         model: options.model ?? "",
-        conversationHistory: history.map(function (message) {
-          return {
-            Role: message.role,
-            Content: message.text,
-          };
-        }),
       };
+
+      if (state.previousResponseId) {
+        (responseBody as Record<string, unknown>).previousResponseId =
+          state.previousResponseId;
+      }
+
+      // Send full history only if the user has a custom template that explicitly requests it
     } else {
       // No custom body provided — use a simple default with the user's message
       responseBody = { message: userText, prompt: userText };
@@ -48,6 +57,7 @@ export async function runEndpointRequest(
       apiKey: options.apiKey ?? "",
       vectorStoreIds: options.vectorStoreIds ?? [],
       model: options.model ?? "",
+      previousResponseId: state.previousResponseId ?? "",
     });
   }
 
@@ -112,6 +122,18 @@ export async function runEndpointRequest(
 
   // Parse the JSON response
   const json = (await response.json()) as unknown;
+
+  // Extract previousResponseId from the response if the endpoint provides it
+  // (for multi-turn conversation support)
+  if (json && typeof json === "object") {
+    const jsonObj = json as Record<string, unknown>;
+    if (
+      typeof jsonObj.previousResponseId === "string" &&
+      jsonObj.previousResponseId.length > 0
+    ) {
+      state.previousResponseId = jsonObj.previousResponseId;
+    }
+  }
 
   if (options.responsePath) {
     // Extract the text from a specific path inside the JSON, e.g. "data.message"
