@@ -4,6 +4,22 @@ type OpenAIRequestState = {
   previousResponseId: string | null;
 };
 
+function isPreviousResponseNotFoundError(
+  status: number,
+  bodyText: string,
+): boolean {
+  if (status < 400) {
+    return false;
+  }
+
+  const text = bodyText.toLowerCase();
+
+  return (
+    (text.includes("previous response") && text.includes("not found")) ||
+    (text.includes("previous_response_id") && text.includes("not found"))
+  );
+}
+
 export async function runOpenAIRequest(
   options: OpenAIDirectOptions,
   userText: string,
@@ -25,33 +41,57 @@ export async function runOpenAIRequest(
     ];
   }
 
-  const requestBody: Record<string, unknown> = {
-    model: options.model ?? "gpt-4.1",
-    input: userText,
-    stream: true,
-  };
+  async function runRequest(
+    includePreviousResponseId: boolean,
+  ): Promise<Response> {
+    const requestBody: Record<string, unknown> = {
+      model: options.model ?? "gpt-4.1",
+      input: userText,
+      stream: true,
+    };
 
-  if (options.instructions) {
-    requestBody.instructions = options.instructions;
+    if (options.instructions) {
+      requestBody.instructions = options.instructions;
+    }
+
+    if (includePreviousResponseId && state.previousResponseId) {
+      requestBody.previous_response_id = state.previousResponseId;
+    }
+
+    if (tools) {
+      requestBody.tools = tools;
+    }
+
+    return fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + options.openaiApiKey,
+      },
+      body: JSON.stringify(requestBody),
+      signal: abortSignal,
+    });
   }
 
-  if (state.previousResponseId) {
-    requestBody.previous_response_id = state.previousResponseId;
-  }
+  let response = await runRequest(true);
 
-  if (tools) {
-    requestBody.tools = tools;
-  }
+  if (!response.ok) {
+    const errorBody = await response.text();
 
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + options.openaiApiKey,
-    },
-    body: JSON.stringify(requestBody),
-    signal: abortSignal,
-  });
+    if (
+      state.previousResponseId &&
+      isPreviousResponseNotFoundError(response.status, errorBody)
+    ) {
+      // OpenAI discards old response IDs after retention windows.
+      // Clear local linkage and retry once as a fresh turn.
+      state.previousResponseId = null;
+      response = await runRequest(false);
+    } else {
+      throw new Error(
+        "OpenAI Responses API error " + response.status + ": " + errorBody,
+      );
+    }
+  }
 
   if (!response.ok) {
     throw new Error(

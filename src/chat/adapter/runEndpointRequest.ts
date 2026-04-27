@@ -102,7 +102,6 @@ export async function runEndpointRequest(
       responseBody = {
         userQuery: userText,
         vectorStoreIds: options.vectorStoreIds ?? [],
-        model: options.model ?? "",
       };
 
       if (state.previousResponseId) {

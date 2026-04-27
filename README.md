@@ -101,7 +101,6 @@ For custom endpoints, the widget auto-uses this request body when `body` is not 
 {
   "userQuery": "string",
   "vectorStoreIds": ["string"],
-  "model": "string",
   "previousResponseId": "string"
 }
 ```
@@ -129,7 +128,6 @@ configure the widget like this:
   authKey="your-auth-key-value"
   authValue="your-auth-value"
   vectorStoreIds={["vs_support_docs"]}
-  model="gpt-4.1"
   responsePath="Result"
   fallbackErrorMessage="Unable to reach assistant right now."
 />
@@ -149,7 +147,6 @@ React:
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean)}
-  model={import.meta.env.VITE_GENERAL_QUERY_MODEL ?? "gpt-4.1"}
   responsePath="Result"
   fallbackErrorMessage="Unable to get query response from API."
 />
@@ -166,7 +163,6 @@ Plain HTML:
     authKey: "your-auth-key-value",
     authValue: "your-auth-value",
     vectorStoreIds: ["vs_support_docs"],
-    model: "gpt-4.1",
     responsePath: "Result",
     fallbackErrorMessage: "Unable to get query response from API.",
   });
@@ -177,7 +173,7 @@ Plain HTML:
 
 1. Set `endpointUrl` to your `GetQueryResponse` API.
 2. Set `authKey` and `authValue` if your API requires authentication headers.
-3. Set `vectorStoreIds` and `model`.
+3. Set `vectorStoreIds`.
 4. Set `responsePath` to `Result`.
 
 If `authKey` and `authValue` are provided, the widget sends two separate headers:

@@ -309,8 +309,7 @@ For custom links, endpoint requests default to:
 ```json
 {
   "userQuery": "latest user text",
-  "vectorStoreIds": ["vs_support_docs"],
-  "model": "gpt-4.1"
+  "vectorStoreIds": ["vs_support_docs"]
 }
 ```
 
