@@ -6,6 +6,7 @@ import {
   useThreadRuntime,
 } from "@assistant-ui/react";
 import type { ThreadMessage, ThreadMessageLike } from "@assistant-ui/core";
+import { gzip, ungzip } from "pako";
 import { DEFAULT_WIDGET_PROPS } from "./defaults";
 import { createOpenAIResponsesAdapter } from "./adapter/createOpenAIResponsesAdapter";
 import { ChatLauncher } from "./components/ChatLauncher";
@@ -63,13 +64,6 @@ function fromCompressedHistoryRole(
   return "user";
 }
 
-function isCompressionSupported() {
-  return (
-    typeof CompressionStream !== "undefined" &&
-    typeof DecompressionStream !== "undefined"
-  );
-}
-
 function uint8ArrayToBase64(bytes: Uint8Array) {
   let binary = "";
 
@@ -92,32 +86,11 @@ function base64ToUint8Array(base64: string) {
 }
 
 async function gzipString(value: string) {
-  const encoder = new TextEncoder();
-  const compressionStream = new CompressionStream("gzip");
-  const writer = compressionStream.writable.getWriter();
-
-  await writer.write(encoder.encode(value));
-  await writer.close();
-
-  const compressed = await new Response(
-    compressionStream.readable,
-  ).arrayBuffer();
-
-  return uint8ArrayToBase64(new Uint8Array(compressed));
+  return uint8ArrayToBase64(gzip(value));
 }
 
 async function gunzipString(value: string) {
-  const decompressionStream = new DecompressionStream("gzip");
-  const writer = decompressionStream.writable.getWriter();
-
-  await writer.write(base64ToUint8Array(value));
-  await writer.close();
-
-  const decompressed = await new Response(
-    decompressionStream.readable,
-  ).arrayBuffer();
-
-  return new TextDecoder().decode(decompressed);
+  return new TextDecoder().decode(ungzip(base64ToUint8Array(value)));
 }
 
 function serializePersistedHistory(payload: CompactPersistedHistoryPayload) {
@@ -310,12 +283,13 @@ async function persistHistory(
   );
   const serializedPayload = serializePersistedHistory(compactPayload);
 
-  if (isCompressionSupported()) {
-    const compressedPayload = await gzipString(serializedPayload);
-    window.localStorage.setItem(
-      storageKey,
-      COMPRESSED_HISTORY_PREFIX + compressedPayload,
-    );
+  const compressedPayload = await gzipString(serializedPayload);
+  window.localStorage.setItem(
+    storageKey,
+    COMPRESSED_HISTORY_PREFIX + compressedPayload,
+  );
+
+  if (compressedPayload.length <= serializedPayload.length) {
     return;
   }
 
