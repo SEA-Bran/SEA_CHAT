@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => {
       build: {
         outDir: "dist-widget",
         emptyOutDir: true,
+        chunkSizeWarningLimit: 650,
         lib: {
           entry: resolve(__dirname, "src/embeddable.tsx"),
           name: "SeaChatWidget",
