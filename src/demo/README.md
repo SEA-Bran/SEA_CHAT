@@ -135,11 +135,7 @@ Default request body sent by the widget in this mode:
   "userQuery": "<user text>",
   "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1",
-  "conversationHistory": [
-    { "Role": "user", "Content": "<older message>" },
-    { "Role": "assistant", "Content": "<older reply>" },
-    { "Role": "user", "Content": "<user text>" }
-  ]
+  "previousResponseId": "resp_abc123"
 }
 ```
 
