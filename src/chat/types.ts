@@ -4,6 +4,7 @@ export type ChatWidgetProps = OpenAIResponsesAdapterOptions & {
   assistantName?: string;
   title?: string;
   statusText?: string;
+  showClearHistoryButton?: boolean;
   launcherText?: string;
   initiallyOpen?: boolean;
   historyTtlHours?: number;

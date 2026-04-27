@@ -400,6 +400,7 @@ export function ChatWidget(props: ChatWidgetProps) {
     props.assistantName ?? DEFAULT_WIDGET_PROPS.assistantName;
   const title = props.title?.trim();
   const statusText = props.statusText ?? DEFAULT_WIDGET_PROPS.statusText;
+  const showClearHistoryButton = props.showClearHistoryButton === true;
   const launcherText = props.launcherText ?? DEFAULT_WIDGET_PROPS.launcherText;
   const initiallyOpen =
     props.initiallyOpen ?? DEFAULT_WIDGET_PROPS.initiallyOpen;
@@ -459,6 +460,11 @@ export function ChatWidget(props: ChatWidgetProps) {
     setIsOpen(!isOpen);
   }
 
+  function handleHistoryCleared() {
+    clearPersistedHistory(historyStorageKey);
+    adapter.reset();
+  }
+
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <ChatHistorySync
@@ -475,7 +481,9 @@ export function ChatWidget(props: ChatWidgetProps) {
           assistantName={assistantName}
           title={title}
           statusText={statusText}
+          showClearHistoryButton={showClearHistoryButton}
           onClose={handleClose}
+          onClearHistory={handleHistoryCleared}
         />
 
         <ChatLauncher

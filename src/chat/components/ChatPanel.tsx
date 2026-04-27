@@ -4,7 +4,8 @@ import {
   BranchPicker,
   AssistantActionBar,
 } from "@assistant-ui/react-ui";
-import { BotMessageSquare } from "lucide-react";
+import { useThread, useThreadRuntime } from "@assistant-ui/react";
+import { BotMessageSquare, Eraser } from "lucide-react";
 import type { FC } from "react";
 import { WELCOME_MESSAGE, WELCOME_SUGGESTIONS } from "../defaults";
 
@@ -30,13 +31,19 @@ type ChatPanelProps = {
   assistantName: string;
   title?: string;
   statusText?: string;
+  showClearHistoryButton?: boolean;
   onClose: () => void;
+  onClearHistory: () => void;
 };
 
 export function ChatPanel(props: ChatPanelProps) {
+  const threadRuntime = useThreadRuntime();
   const title = props.title?.trim();
   const statusText = props.statusText?.trim();
   const shouldShowStatus = props.statusText !== undefined;
+  const hasMessages = useThread(function (state) {
+    return state.messages.length > 0;
+  });
 
   // "let" because this value will change — we add a class when the chat is open
   let panelClassName = "chat-panel";
@@ -44,6 +51,11 @@ export function ChatPanel(props: ChatPanelProps) {
   // When the chat is open, add the --open class so CSS makes it visible
   if (props.isOpen) {
     panelClassName += " chat-panel--open";
+  }
+
+  function handleClearHistory() {
+    threadRuntime.reset();
+    props.onClearHistory();
   }
 
   return (
@@ -61,6 +73,19 @@ export function ChatPanel(props: ChatPanelProps) {
         </div>
 
         <div className="chat-panel__actions">
+          {props.showClearHistoryButton ? (
+            <button
+              type="button"
+              className="secondary-button secondary-button--icon"
+              onClick={handleClearHistory}
+              disabled={!hasMessages}
+              aria-label="Clear chat history"
+              title="Clear chat history"
+            >
+              <Eraser size={15} aria-hidden="true" />
+            </button>
+          ) : null}
+
           <button
             type="button"
             className="icon-button"

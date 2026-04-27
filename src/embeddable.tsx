@@ -55,6 +55,7 @@ function init(options: SeaChatWidgetOptions = {}): SeaChatWidgetInstance {
     assistantName: options.assistantName,
     title: options.title,
     statusText: options.statusText,
+    showClearHistoryButton: options.showClearHistoryButton,
     launcherText: options.launcherText,
     initiallyOpen: options.initiallyOpen,
     historyTtlHours: options.historyTtlHours,
