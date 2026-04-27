@@ -40,6 +40,7 @@ export function ChatPanel(props: ChatPanelProps) {
   const threadRuntime = useThreadRuntime();
   const title = props.title?.trim();
   const statusText = props.statusText?.trim();
+  const shouldShowStatus = props.statusText !== undefined;
   const hasMessages = useThread(function (state) {
     return state.messages.length > 0;
   });
@@ -63,16 +64,16 @@ export function ChatPanel(props: ChatPanelProps) {
         <div>
           <p className="chat-panel__label">{props.assistantName}</p>
           {title ? <h2>{title}</h2> : null}
-          {statusText ? (
+          {shouldShowStatus ? (
             <p className="chat-panel__status" aria-live="polite">
               <span className="status-dot" aria-hidden="true" />
-              <span>{statusText}</span>
+              {statusText ? <span>{statusText}</span> : null}
             </p>
           ) : null}
         </div>
 
         <div className="chat-panel__actions">
-          {props.showClearHistoryButton ? (
+          {props.showClearHistoryButton && hasMessages ? (
             <button
               type="button"
               className="secondary-button secondary-button--icon"
