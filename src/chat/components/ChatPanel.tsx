@@ -30,13 +30,14 @@ type ChatPanelProps = {
   isOpen: boolean;
   assistantName: string;
   title: string;
-  statusText: string;
+  statusText?: string;
   onClose: () => void;
   onClearHistory: () => void;
 };
 
 export function ChatPanel(props: ChatPanelProps) {
   const threadRuntime = useThreadRuntime();
+  const statusText = props.statusText?.trim();
   const hasMessages = useThread(function (state) {
     return state.messages.length > 0;
   });
@@ -60,10 +61,12 @@ export function ChatPanel(props: ChatPanelProps) {
         <div>
           <p className="chat-panel__label">{props.assistantName}</p>
           <h2>{props.title}</h2>
-          <p className="chat-panel__status" aria-live="polite">
-            <span className="status-dot" aria-hidden="true" />
-            {props.statusText}
-          </p>
+          {statusText ? (
+            <p className="chat-panel__status" aria-live="polite">
+              <span className="status-dot" aria-hidden="true" />
+              {statusText}
+            </p>
+          ) : null}
         </div>
 
         <div className="chat-panel__actions">

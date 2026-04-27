@@ -22,16 +22,16 @@
 
 .sea-chat-widget .chat-panel {
   position: relative;
-  width: min(410px, calc(100vw - 30px));
-  height: min(700px, calc(100vh - 110px));
+  width: min(390px, calc(100vw - 28px));
+  height: min(680px, calc(100vh - 100px));
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  margin-bottom: 14px;
-  border-radius: 26px;
+  margin-bottom: 12px;
+  border-radius: 22px;
   border: 1px solid var(--sea-line);
-  background: linear-gradient(180deg, #ffffff 0%, #fff8f8 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #fff9fa 100%);
   box-shadow:
-    0 28px 70px rgba(122, 20, 33, 0.26),
+    0 24px 56px rgba(122, 20, 33, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.85);
   overflow: hidden;
   transform: translateY(18px) scale(0.96);
@@ -49,12 +49,12 @@
   background: linear-gradient(
     115deg,
     rgba(255, 255, 255, 0) 45%,
-    rgba(255, 224, 228, 0.26) 50%,
+    rgba(255, 224, 228, 0.18) 50%,
     rgba(255, 255, 255, 0) 57%
   );
   transform: translateX(-130%);
-  animation: sea-panel-sheen 9s ease-in-out infinite;
-  opacity: 0.45;
+  animation: sea-panel-sheen 12s ease-in-out infinite;
+  opacity: 0.3;
 }
 
 .sea-chat-widget .chat-panel::before {
@@ -81,8 +81,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 14px;
-  padding: 18px 18px 14px;
+  gap: 12px;
+  padding: 14px 14px 11px;
   background:
     radial-gradient(circle at 88% 20%, rgba(255, 255, 255, 0.22), transparent 32%),
     linear-gradient(125deg, var(--sea-accent-a) 0%, var(--sea-accent-b) 54%, var(--sea-accent-c) 100%);
@@ -93,13 +93,13 @@
 .sea-chat-widget .chat-panel__actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .sea-chat-widget .chat-panel__label {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 600;
@@ -112,8 +112,8 @@
 
 .sea-chat-widget h2 {
   color: #ffffff;
-  font-size: 1.52rem;
-  line-height: 1.04;
+  font-size: 1.15rem;
+  line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
@@ -121,39 +121,39 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin: 8px 0 0;
+  margin: 5px 0 0;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.89rem;
+  font-size: 0.8rem;
 }
 
 .sea-chat-widget .status-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
   background: #16a34a;
   box-shadow: 0 0 0 6px rgba(22, 163, 74, 0.14);
 }
 
 .sea-chat-widget .icon-button {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 14px;
+  border-radius: 11px;
   background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  font-size: 1.55rem;
+  font-size: 1.35rem;
   cursor: pointer;
   transition: transform 140ms ease, background 140ms ease;
 }
 
 .sea-chat-widget .secondary-button {
-  min-height: 40px;
-  padding: 0 14px;
+  min-height: 34px;
+  padding: 0 11px;
   border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: 14px;
+  border-radius: 11px;
   background: rgba(255, 255, 255, 0.18);
   color: #ffffff;
-  font-size: 0.88rem;
+  font-size: 0.79rem;
   font-weight: 600;
   cursor: pointer;
   transition:
@@ -167,8 +167,8 @@
 .sea-chat-widget .secondary-button--icon {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 13px 0 12px;
+  gap: 6px;
+  padding: 0 10px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14)),
     rgba(255, 255, 255, 0.12);
@@ -205,7 +205,7 @@
 .sea-chat-widget .chat-panel__body {
   min-height: 0;
   overflow-y: auto;
-  padding: 18px;
+  padding: 12px;
 }
 
 .sea-chat-widget .chat-panel__body--thread {
@@ -222,9 +222,7 @@
 /* assistant-ui overrides */
 .sea-chat-widget .aui-thread-root {
   height: 100%;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 251, 252, 0.96)),
-    radial-gradient(circle at 18% 14%, rgba(252, 165, 165, 0.2), transparent 45%);
+  background: linear-gradient(180deg, #fffdfd 0%, #fff9fa 100%);
   --aui-background: 0 0% 100%;
   --aui-foreground: 344 35% 14%;
   --aui-muted-foreground: 345 25% 42%;
@@ -232,33 +230,33 @@
 }
 
 .sea-chat-widget .aui-thread-viewport {
-  padding: 18px 16px 14px;
+  padding: 12px 12px 10px;
   scrollbar-width: thin;
   scrollbar-color: rgba(190, 18, 60, 0.35) transparent;
 }
 
 .sea-chat-widget .aui-thread-welcome-root {
-  border-radius: 18px;
-  padding: 8px 2px 6px;
+  border-radius: 14px;
+  padding: 4px 0 4px;
 }
 
 .sea-chat-widget .aui-thread-welcome-message {
   color: #38191f;
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.45;
 }
 
 .sea-chat-widget .aui-thread-welcome-suggestions {
   display: grid;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .sea-chat-widget .aui-thread-welcome-suggestion {
   border: 1px solid rgba(220, 38, 38, 0.2);
-  border-radius: 14px;
+  border-radius: 11px;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 22px rgba(122, 20, 33, 0.08);
+  box-shadow: 0 6px 16px rgba(122, 20, 33, 0.07);
   transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
 }
 
@@ -271,46 +269,140 @@
 .sea-chat-widget .aui-thread-welcome-suggestion-text {
   color: #651e2a;
   font-weight: 600;
+  font-size: 0.92rem;
 }
 
 .sea-chat-widget .aui-assistant-message-root,
 .sea-chat-widget .aui-user-message-root {
-  margin-bottom: 13px;
+  margin-bottom: 10px;
   animation: sea-bubble-in 230ms ease;
 }
 
 .sea-chat-widget .aui-assistant-message-content,
 .sea-chat-widget .aui-user-message-content {
-  border-radius: 18px;
-  padding: 12px 15px;
-  line-height: 1.62;
-  box-shadow: 0 12px 26px rgba(122, 20, 33, 0.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+  line-height: 1.6;
+  font-size: 0.93rem;
+  box-shadow: 0 8px 18px rgba(122, 20, 33, 0.1);
 }
 
 .sea-chat-widget .aui-assistant-message-content {
-  border-top-left-radius: 10px;
+  max-width: 95%;
+  border-top-left-radius: 8px;
   border: 1px solid rgba(220, 38, 38, 0.16);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 249, 0.95));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 249, 250, 0.98));
   color: #32151b;
+  overflow-wrap: anywhere;
 }
 
 .sea-chat-widget .aui-user-message-content {
-  border-top-right-radius: 10px;
+  max-width: 88%;
+  border-top-right-radius: 8px;
   background: linear-gradient(132deg, #dc2626 0%, #be123c 68%, #881337 110%);
   color: #fff6f7;
 }
 
+.sea-chat-widget .aui-assistant-message-content > * {
+  max-width: 68ch;
+}
+
+.sea-chat-widget .aui-assistant-message-content p,
+.sea-chat-widget .aui-user-message-content p {
+  margin: 0 0 0.7em;
+}
+
+.sea-chat-widget .aui-assistant-message-content p:last-child,
+.sea-chat-widget .aui-user-message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.sea-chat-widget .aui-assistant-message-content ul,
+.sea-chat-widget .aui-assistant-message-content ol,
+.sea-chat-widget .aui-user-message-content ul,
+.sea-chat-widget .aui-user-message-content ol {
+  margin: 0.3em 0 0.8em;
+  padding-left: 1.15rem;
+}
+
+.sea-chat-widget .aui-assistant-message-content li + li,
+.sea-chat-widget .aui-user-message-content li + li {
+  margin-top: 0.28em;
+}
+
+.sea-chat-widget .aui-assistant-message-content h1,
+.sea-chat-widget .aui-assistant-message-content h2,
+.sea-chat-widget .aui-assistant-message-content h3 {
+  margin: 0.2em 0 0.55em;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.sea-chat-widget .aui-assistant-message-content h1 {
+  font-size: 1.05rem;
+}
+
+.sea-chat-widget .aui-assistant-message-content h2 {
+  font-size: 1rem;
+}
+
+.sea-chat-widget .aui-assistant-message-content h3 {
+  font-size: 0.95rem;
+}
+
+.sea-chat-widget .aui-assistant-message-content code,
+.sea-chat-widget .aui-user-message-content code {
+  font-size: 0.86em;
+  padding: 0.12em 0.34em;
+  border-radius: 6px;
+}
+
+.sea-chat-widget .aui-assistant-message-content code {
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.sea-chat-widget .aui-user-message-content code {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sea-chat-widget .aui-assistant-message-content pre,
+.sea-chat-widget .aui-user-message-content pre {
+  margin: 0.5em 0 0.9em;
+  padding: 0.72em 0.85em;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 0.84em;
+  line-height: 1.55;
+}
+
+.sea-chat-widget .aui-assistant-message-content pre {
+  border: 1px solid rgba(220, 38, 38, 0.14);
+  background: #fff5f6;
+}
+
+.sea-chat-widget .aui-user-message-content pre {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sea-chat-widget .aui-assistant-message-content blockquote,
+.sea-chat-widget .aui-user-message-content blockquote {
+  margin: 0.4em 0 0.85em;
+  padding: 0.2em 0 0.2em 0.7em;
+  border-left: 3px solid rgba(220, 38, 38, 0.35);
+}
+
 .sea-chat-widget .aui-thread-viewport-footer {
-  padding: 12px 12px 12px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 1));
+  padding: 9px 10px 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 1));
+  backdrop-filter: blur(3px);
 }
 
 .sea-chat-widget .aui-composer-root {
   border: 1px solid rgba(220, 38, 38, 0.18);
-  border-radius: 16px;
+  border-radius: 13px;
   background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 14px 30px rgba(122, 20, 33, 0.14);
-  padding: 8px;
+  box-shadow: 0 10px 24px rgba(122, 20, 33, 0.12);
+  padding: 6px;
 }
 
 .sea-chat-widget .aui-composer-root:focus-within {
@@ -321,10 +413,11 @@
 .sea-chat-widget .aui-composer-input {
   background: transparent;
   color: #37161c;
-  min-height: 40px;
+  min-height: 36px;
   border: 0;
   outline: none;
   box-shadow: none;
+  line-height: 1.45;
 }
 
 .sea-chat-widget .aui-input,
@@ -336,11 +429,11 @@
 }
 
 .sea-chat-widget .aui-composer-send {
-  border-radius: 12px;
+  border-radius: 10px;
   border: 0;
   background: linear-gradient(135deg, var(--sea-accent-a), var(--sea-accent-b), var(--sea-accent-c));
   color: #fff6f7;
-  box-shadow: 0 10px 18px rgba(159, 18, 57, 0.28);
+  box-shadow: 0 8px 14px rgba(159, 18, 57, 0.24);
 }
 
 .sea-chat-widget .aui-composer-send:hover {
@@ -348,7 +441,7 @@
 }
 
 .sea-chat-widget .aui-composer-cancel {
-  border-radius: 11px;
+  border-radius: 10px;
   border: 1px solid rgba(220, 38, 38, 0.35);
   background: rgba(255, 241, 242, 0.95);
   color: #9f1239;
@@ -402,12 +495,12 @@
 }
 
 .sea-chat-widget .launcher {
-  min-width: 192px;
+  min-width: 168px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 11px;
-  padding: 15px 18px;
+  padding: 12px 16px;
   border-radius: 999px;
   border: 1px solid rgba(220, 38, 38, 0.35);
   background:
@@ -431,8 +524,8 @@
 }
 
 .sea-chat-widget .launcher__icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: inline-grid;
   place-items: center;
   border-radius: 999px;
@@ -442,6 +535,7 @@
 .sea-chat-widget .launcher__text {
   font-weight: 700;
   letter-spacing: 0.01em;
+  font-size: 0.95rem;
 }
 
 .sea-chat-widget .launcher__badge {
@@ -505,12 +599,12 @@
 
   .sea-chat-widget .chat-panel {
     width: 100%;
-    height: min(82vh, 700px);
+    height: min(84vh, 700px);
     transform-origin: bottom center;
   }
 
   .sea-chat-widget .chat-panel__header {
-    padding: 16px 14px 12px;
+    padding: 13px 12px 10px;
   }
 
   .sea-chat-widget .chat-panel__actions {
@@ -519,13 +613,13 @@
   }
 
   .sea-chat-widget h2 {
-    font-size: 1.32rem;
+    font-size: 1.03rem;
   }
 
   .sea-chat-widget .secondary-button {
-    min-height: 36px;
-    padding: 0 12px;
-    font-size: 0.82rem;
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 0.76rem;
   }
 
   .sea-chat-widget .launcher {
