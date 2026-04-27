@@ -1,10 +1,77 @@
 import { buildRequestBody } from "./buildRequestBody";
-import { resolvePath } from "./resolvePath";
+import { resolvePath, resolvePathValue } from "./resolvePath";
 import type { EndpointOptions, MessageHistory } from "./types";
 
 type EndpointRequestState = {
   previousResponseId: string | null;
 };
+
+function getValueCaseInsensitive(
+  source: Record<string, unknown>,
+  key: string,
+): unknown {
+  if (Object.prototype.hasOwnProperty.call(source, key)) {
+    return source[key];
+  }
+
+  const matchingKey = Object.keys(source).find(
+    (currentKey) => currentKey.toLowerCase() === key.toLowerCase(),
+  );
+
+  if (!matchingKey) {
+    return undefined;
+  }
+
+  return source[matchingKey];
+}
+
+function setPreviousResponseIdFromValue(
+  value: unknown,
+  state: EndpointRequestState,
+): void {
+  if (!value || typeof value !== "object") {
+    return;
+  }
+
+  const source = value as Record<string, unknown>;
+  const previousResponseId = getValueCaseInsensitive(
+    source,
+    "previousResponseId",
+  );
+  const responseId = getValueCaseInsensitive(source, "responseId");
+
+  if (typeof previousResponseId === "string" && previousResponseId.length > 0) {
+    state.previousResponseId = previousResponseId;
+    return;
+  }
+
+  if (typeof responseId === "string" && responseId.length > 0) {
+    state.previousResponseId = responseId;
+  }
+}
+
+function extractTextFromValue(value: unknown): string {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "object") {
+    const source = value as Record<string, unknown>;
+    const responseText = getValueCaseInsensitive(source, "responseText");
+
+    if (typeof responseText === "string") {
+      return responseText;
+    }
+
+    return JSON.stringify(value);
+  }
+
+  return String(value);
+}
 
 export async function runEndpointRequest(
   options: EndpointOptions,
@@ -20,9 +87,7 @@ export async function runEndpointRequest(
   // "const" = these values are set once and never changed
   const method = options.method ?? "POST";
   const hasCustomEndpointConfig =
-    options.apiKey !== undefined ||
-    options.vectorStoreIds !== undefined ||
-    options.model !== undefined;
+    options.vectorStoreIds !== undefined || options.model !== undefined;
   const useCustomEndpointRequest =
     options.useCustomEndpointRequest ?? hasCustomEndpointConfig;
 
@@ -35,7 +100,6 @@ export async function runEndpointRequest(
       // Only send the current user message, not the full history (conversation state is
       // maintained server-side via previous_response_id, improving cost and security)
       responseBody = {
-        apiKey: options.apiKey ?? "",
         userQuery: userText,
         vectorStoreIds: options.vectorStoreIds ?? [],
         model: options.model ?? "",
@@ -125,19 +189,21 @@ export async function runEndpointRequest(
 
   // Extract previousResponseId from the response if the endpoint provides it
   // (for multi-turn conversation support)
+  setPreviousResponseIdFromValue(json, state);
+
   if (json && typeof json === "object") {
-    const jsonObj = json as Record<string, unknown>;
-    if (
-      typeof jsonObj.previousResponseId === "string" &&
-      jsonObj.previousResponseId.length > 0
-    ) {
-      state.previousResponseId = jsonObj.previousResponseId;
-    }
+    const jsonObject = json as Record<string, unknown>;
+    setPreviousResponseIdFromValue(
+      getValueCaseInsensitive(jsonObject, "Result"),
+      state,
+    );
   }
 
   if (options.responsePath) {
     // Extract the text from a specific path inside the JSON, e.g. "data.message"
-    const text = resolvePath(json, options.responsePath);
+    const resolvedValue = resolvePathValue(json, options.responsePath);
+    setPreviousResponseIdFromValue(resolvedValue, state);
+    const text = extractTextFromValue(resolvedValue);
 
     if (!text) {
       throw new Error(
@@ -154,16 +220,14 @@ export async function runEndpointRequest(
     const message = apiResponse.Message;
     const result = apiResponse.Result;
 
+    setPreviousResponseIdFromValue(result, state);
+
     if (success === false) {
       if (typeof message === "string" && message.length > 0) {
         throw new Error(message);
       }
 
       throw new Error("Endpoint returned Success=false");
-    }
-
-    if (typeof result === "string") {
-      return result;
     }
 
     if (result === null || result === undefined) {
@@ -174,12 +238,12 @@ export async function runEndpointRequest(
       throw new Error("Endpoint response Result is empty");
     }
 
-    return String(result);
+    return extractTextFromValue(result);
   }
 
   if (typeof json === "string") {
     return json;
   }
 
-  return JSON.stringify(json);
+  return resolvePath(json, "responseText") || JSON.stringify(json);
 }

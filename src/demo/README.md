@@ -110,7 +110,6 @@ For an ASP.NET endpoint like `GetQueryResponse([FromBody] GeneralQueryRequest re
   method="POST"
   authKey="your-auth-key-value"
   authValue="your-auth-value"
-  apiKey="<encrypted-api-key>"
   vectorStoreIds={["vs_support_docs"]}
   model="gpt-4.1"
   responsePath="Result"
@@ -123,10 +122,9 @@ Simple setup:
 1. Put your API URL in `endpointUrl`.
 2. If needed, put auth key value in `authKey` (sent as HTTP header "AuthKey").
 3. If needed, put auth value in `authValue` (sent as HTTP header "AuthValue").
-4. Put encrypted API key in `apiKey`.
-5. Put vector store IDs in `vectorStoreIds`.
-6. Put model name in `model`.
-7. Keep `responsePath="Result"`.
+4. Put vector store IDs in `vectorStoreIds`.
+5. Put model name in `model`.
+6. Keep `responsePath="Result"`.
 
 The widget prioritizes this custom endpoint flow when `endpointUrl` is provided.
 
@@ -134,7 +132,6 @@ Default request body sent by the widget in this mode:
 
 ```json
 {
-  "apiKey": "<encrypted-api-key>",
   "userQuery": "<user text>",
   "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1",

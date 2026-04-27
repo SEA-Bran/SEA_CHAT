@@ -99,7 +99,6 @@ For custom endpoints, the widget auto-uses this request body when `body` is not 
 
 ```json
 {
-  "apiKey": "string",
   "userQuery": "string",
   "vectorStoreIds": ["string"],
   "model": "string",
@@ -129,7 +128,6 @@ configure the widget like this:
   method="POST"
   authKey="your-auth-key-value"
   authValue="your-auth-value"
-  apiKey="<encrypted-api-key>"
   vectorStoreIds={["vs_support_docs"]}
   model="gpt-4.1"
   responsePath="Result"
@@ -147,7 +145,6 @@ React:
   method="POST"
   authKey={import.meta.env.VITE_GENERAL_QUERY_AUTH_KEY}
   authValue={import.meta.env.VITE_GENERAL_QUERY_AUTH_VALUE}
-  apiKey={import.meta.env.VITE_GENERAL_QUERY_API_KEY}
   vectorStoreIds={(import.meta.env.VITE_GENERAL_QUERY_VECTOR_STORE_IDS ?? "")
     .split(",")
     .map((value) => value.trim())
@@ -168,7 +165,6 @@ Plain HTML:
     method: "POST",
     authKey: "your-auth-key-value",
     authValue: "your-auth-value",
-    apiKey: "<encrypted-api-key>",
     vectorStoreIds: ["vs_support_docs"],
     model: "gpt-4.1",
     responsePath: "Result",
@@ -181,7 +177,7 @@ Plain HTML:
 
 1. Set `endpointUrl` to your `GetQueryResponse` API.
 2. Set `authKey` and `authValue` if your API requires authentication headers.
-3. Set `apiKey`, `vectorStoreIds`, and `model`.
+3. Set `vectorStoreIds` and `model`.
 4. Set `responsePath` to `Result`.
 
 If `authKey` and `authValue` are provided, the widget sends two separate headers:
@@ -195,7 +191,6 @@ You can now chat immediately. Each user message is sent as:
 
 ```json
 {
-  "apiKey": "<encrypted-api-key>",
   "userQuery": "<latest user message>",
   "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1",
@@ -211,10 +206,10 @@ You can now chat immediately. Each user message is sent as:
 The widget sends this JSON body by default when:
 
 - `endpointUrl` is provided, or
-- `apiKey`, `vectorStoreIds`, or `model` are provided, or
+- `vectorStoreIds` or `model` are provided, or
 - `useCustomEndpointRequest: true` is set.
 
-You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{apiKey}}`, `{{vectorStoreIds}}`, `{{model}}`, `{{previousResponseId}}`, and `{{conversationHistory}}`.
+You can still provide a custom `body` template and use placeholders such as `{{userQuery}}`, `{{vectorStoreIds}}`, `{{model}}`, `{{previousResponseId}}`, and `{{conversationHistory}}`.
 
 **Important**: If you use `{{conversationHistory}}` in your custom template, the widget will send the full recent history (capped at 10 messages) for backwards compatibility. For new implementations, use `{{previousResponseId}}` instead for better cost and security.
 

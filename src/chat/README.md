@@ -127,10 +127,10 @@ The widget will automatically store and resend `previousResponseId` on the next 
 
 #### **For Your Frontend:**
 
-If you're integrating the widget, just pass your API key and URL:
+If you're integrating the widget, pass your endpoint URL:
 
 ```tsx
-<ChatWidget endpointUrl="https://your-api.com/chat" apiKey="sk_your_key" />
+<ChatWidget endpointUrl="https://your-api.com/chat" />
 ```
 
 The widget handles conversation memory automatically.
@@ -308,7 +308,6 @@ For custom links, endpoint requests default to:
 
 ```json
 {
-  "apiKey": "...",
   "userQuery": "latest user text",
   "vectorStoreIds": ["vs_support_docs"],
   "model": "gpt-4.1"
@@ -325,7 +324,6 @@ If you pass `body`, the adapter keeps using your custom payload, with support fo
 
 - `{{message}}` / `{{prompt}}` / `{{userInput}}` / `{{userQuery}}`
 - `{{messages}}`
-- `{{apiKey}}`
 - `{{vectorStoreIds}}`
 - `{{model}}`
 
