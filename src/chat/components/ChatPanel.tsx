@@ -5,7 +5,7 @@ import {
   AssistantActionBar,
 } from "@assistant-ui/react-ui";
 import { useThread, useThreadRuntime } from "@assistant-ui/react";
-import { BotMessageSquare } from "lucide-react";
+import { BotMessageSquare, Eraser } from "lucide-react";
 import type { FC } from "react";
 import { WELCOME_MESSAGE, WELCOME_SUGGESTIONS } from "../defaults";
 
@@ -69,11 +69,13 @@ export function ChatPanel(props: ChatPanelProps) {
         <div className="chat-panel__actions">
           <button
             type="button"
-            className="secondary-button"
+            className="secondary-button secondary-button--icon"
             onClick={handleClearHistory}
             disabled={!hasMessages}
+            aria-label="Clear chat history"
           >
-            Clear history
+            <Eraser size={15} aria-hidden="true" />
+            <span>Clear</span>
           </button>
 
           <button

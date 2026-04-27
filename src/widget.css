@@ -159,7 +159,29 @@
   transition:
     transform 140ms ease,
     background 140ms ease,
-    opacity 140ms ease;
+    opacity 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.sea-chat-widget .secondary-button--icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px 0 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14)),
+    rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.sea-chat-widget .secondary-button--icon svg {
+  flex: 0 0 auto;
+  opacity: 0.92;
+}
+
+.sea-chat-widget .secondary-button--icon span {
+  letter-spacing: 0.01em;
 }
 
 .sea-chat-widget .icon-button:hover {
@@ -170,6 +192,8 @@
 .sea-chat-widget .secondary-button:hover {
   transform: translateY(-1px);
   background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 8px 18px rgba(72, 11, 20, 0.16);
 }
 
 .sea-chat-widget .secondary-button:disabled {
