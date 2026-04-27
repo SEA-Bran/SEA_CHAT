@@ -97,7 +97,7 @@
 .sea-chat-widget .chat-panel__label {
   margin: 0;
   color: #fff8f9;
-  font-size: 1.78rem;
+  font-size: 1.34rem;
   line-height: 1.08;
   letter-spacing: -0.015em;
   font-weight: 700;
@@ -644,7 +644,7 @@
   }
 
   .sea-chat-widget .chat-panel__label {
-    font-size: 1.62rem;
+    font-size: 1.2rem;
   }
 
   .sea-chat-widget h2 {

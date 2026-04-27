@@ -40,7 +40,6 @@ export function ChatPanel(props: ChatPanelProps) {
   const threadRuntime = useThreadRuntime();
   const title = props.title?.trim();
   const statusText = props.statusText?.trim();
-  const shouldShowStatus = props.statusText !== undefined;
   const hasMessages = useThread(function (state) {
     return state.messages.length > 0;
   });
@@ -64,10 +63,10 @@ export function ChatPanel(props: ChatPanelProps) {
         <div>
           <p className="chat-panel__label">{props.assistantName}</p>
           {title ? <h2>{title}</h2> : null}
-          {shouldShowStatus ? (
+          {statusText ? (
             <p className="chat-panel__status" aria-live="polite">
               <span className="status-dot" aria-hidden="true" />
-              {statusText ? <span>{statusText}</span> : null}
+              <span>{statusText}</span>
             </p>
           ) : null}
         </div>
