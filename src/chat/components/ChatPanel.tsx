@@ -4,8 +4,7 @@ import {
   BranchPicker,
   AssistantActionBar,
 } from "@assistant-ui/react-ui";
-import { useThread, useThreadRuntime } from "@assistant-ui/react";
-import { BotMessageSquare, Eraser } from "lucide-react";
+import { BotMessageSquare } from "lucide-react";
 import type { FC } from "react";
 import { WELCOME_MESSAGE, WELCOME_SUGGESTIONS } from "../defaults";
 
@@ -29,18 +28,14 @@ const BotAssistantMessage: FC = () => (
 type ChatPanelProps = {
   isOpen: boolean;
   assistantName: string;
-  title: string;
+  title?: string;
   statusText?: string;
   onClose: () => void;
-  onClearHistory: () => void;
 };
 
 export function ChatPanel(props: ChatPanelProps) {
-  const threadRuntime = useThreadRuntime();
+  const title = props.title?.trim();
   const statusText = props.statusText?.trim();
-  const hasMessages = useThread(function (state) {
-    return state.messages.length > 0;
-  });
 
   // "let" because this value will change — we add a class when the chat is open
   let panelClassName = "chat-panel";
@@ -50,17 +45,12 @@ export function ChatPanel(props: ChatPanelProps) {
     panelClassName += " chat-panel--open";
   }
 
-  function handleClearHistory() {
-    threadRuntime.reset();
-    props.onClearHistory();
-  }
-
   return (
     <div className={panelClassName}>
       <header className="chat-panel__header">
         <div>
           <p className="chat-panel__label">{props.assistantName}</p>
-          <h2>{props.title}</h2>
+          {title ? <h2>{title}</h2> : null}
           {statusText ? (
             <p className="chat-panel__status" aria-live="polite">
               <span className="status-dot" aria-hidden="true" />
@@ -70,17 +60,6 @@ export function ChatPanel(props: ChatPanelProps) {
         </div>
 
         <div className="chat-panel__actions">
-          <button
-            type="button"
-            className="secondary-button secondary-button--icon"
-            onClick={handleClearHistory}
-            disabled={!hasMessages}
-            aria-label="Clear chat history"
-          >
-            <Eraser size={15} aria-hidden="true" />
-            <span>Clear</span>
-          </button>
-
           <button
             type="button"
             className="icon-button"
