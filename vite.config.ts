@@ -32,5 +32,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    build: {
+      chunkSizeWarningLimit: 650,
+    },
   };
 });
