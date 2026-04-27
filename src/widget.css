@@ -22,16 +22,16 @@
 
 .sea-chat-widget .chat-panel {
   position: relative;
-  width: min(372px, calc(100vw - 24px));
-  height: min(670px, calc(100vh - 96px));
+  width: min(540px, calc(100vw - 14px));
+  height: min(730px, calc(100vh - 86px));
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  margin-bottom: 12px;
-  border-radius: 18px;
-  border: 1px solid var(--sea-line);
-  background: linear-gradient(180deg, #ffffff 0%, #fff9fa 100%);
+  margin-bottom: 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(220, 38, 38, 0.14);
+  background: linear-gradient(180deg, #ffffff 0%, #fffafb 100%);
   box-shadow:
-    0 24px 56px rgba(122, 20, 33, 0.24),
+    0 24px 54px rgba(122, 20, 33, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.85);
   overflow: hidden;
   transform: translateY(18px) scale(0.96);
@@ -79,8 +79,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
-  padding: 14px 14px 11px;
+  gap: 10px;
+  padding: 10px 14px 9px;
   background:
     radial-gradient(circle at 88% 20%, rgba(255, 255, 255, 0.22), transparent 32%),
     linear-gradient(125deg, var(--sea-accent-a) 0%, var(--sea-accent-b) 54%, var(--sea-accent-c) 100%);
@@ -95,12 +95,13 @@
 }
 
 .sea-chat-widget .chat-panel__label {
-  margin: 0 0 4px;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 600;
+  margin: 0;
+  color: #fff8f9;
+  font-size: 1.78rem;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  text-transform: none;
 }
 
 .sea-chat-widget h2,
@@ -118,10 +119,10 @@
 .sea-chat-widget .chat-panel__status {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin: 5px 0 0;
+  gap: 6px;
+  margin: 6px 0 0;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.8rem;
+  font-size: 0.86rem;
 }
 
 .sea-chat-widget .status-dot {
@@ -201,7 +202,7 @@
 .sea-chat-widget .chat-panel__body {
   min-height: 0;
   overflow-y: auto;
-  padding: 12px;
+  padding: 0;
 }
 
 .sea-chat-widget .chat-panel__body--thread {
@@ -218,7 +219,7 @@
 /* assistant-ui overrides */
 .sea-chat-widget .aui-thread-root {
   height: 100%;
-  background: linear-gradient(180deg, #fffdfd 0%, #fff9fa 100%);
+  background: linear-gradient(180deg, #fffefe 0%, #fffafb 100%);
   --aui-background: 0 0% 100%;
   --aui-foreground: 344 35% 14%;
   --aui-muted-foreground: 345 25% 42%;
@@ -226,34 +227,41 @@
 }
 
 .sea-chat-widget .aui-thread-viewport {
-  padding: 10px 10px 8px;
-  scrollbar-gutter: stable;
+  padding: 18px 18px 10px;
   scrollbar-width: thin;
   scrollbar-color: rgba(190, 18, 60, 0.35) transparent;
 }
 
 .sea-chat-widget .aui-thread-welcome-root {
-  border-radius: 14px;
-  padding: 4px 0 4px;
+  border-radius: 16px;
+  min-height: calc(100% - 132px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
 }
 
 .sea-chat-widget .aui-thread-welcome-message {
   color: #38191f;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   line-height: 1.45;
+  font-weight: 600;
 }
 
 .sea-chat-widget .aui-thread-welcome-suggestions {
   display: grid;
-  gap: 8px;
-  margin-top: 12px;
+  width: min(100%, 410px);
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .sea-chat-widget .aui-thread-welcome-suggestion {
   border: 1px solid rgba(220, 38, 38, 0.2);
-  border-radius: 11px;
+  border-radius: 13px;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 6px 16px rgba(122, 20, 33, 0.07);
+  box-shadow: none;
   transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
 }
 
@@ -278,9 +286,9 @@
 .sea-chat-widget .aui-assistant-message-content,
 .sea-chat-widget .aui-user-message-content {
   border-radius: 12px;
-  padding: 9px 11px;
+  padding: 10px 12px;
   line-height: 1.62;
-  font-size: 0.91rem;
+  font-size: 0.93rem;
   box-shadow: 0 8px 18px rgba(122, 20, 33, 0.1);
 }
 
@@ -302,7 +310,7 @@
 }
 
 .sea-chat-widget .aui-assistant-message-content > * {
-  max-width: 60ch;
+  max-width: 62ch;
   text-wrap: pretty;
 }
 
@@ -415,17 +423,17 @@
 }
 
 .sea-chat-widget .aui-thread-viewport-footer {
-  padding: 8px 8px 8px;
+  padding: 10px 14px 12px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 1));
   backdrop-filter: blur(3px);
 }
 
 .sea-chat-widget .aui-composer-root {
   border: 1px solid rgba(220, 38, 38, 0.18);
-  border-radius: 11px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 10px 24px rgba(122, 20, 33, 0.12);
-  padding: 5px;
+  padding: 6px;
 }
 
 .sea-chat-widget .aui-composer-root:focus-within {
@@ -436,7 +444,7 @@
 .sea-chat-widget .aui-composer-input {
   background: transparent;
   color: #37161c;
-  min-height: 34px;
+  min-height: 38px;
   border: 0;
   outline: none;
   box-shadow: none;
@@ -518,12 +526,12 @@
 }
 
 .sea-chat-widget .launcher {
-  min-width: 154px;
+  min-width: 176px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 11px;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 999px;
   border: 1px solid rgba(220, 38, 38, 0.35);
   background:
@@ -558,7 +566,7 @@
 .sea-chat-widget .launcher__text {
   font-weight: 700;
   letter-spacing: 0.01em;
-  font-size: 0.9rem;
+  font-size: 0.94rem;
 }
 
 .sea-chat-widget .launcher__badge {
@@ -616,23 +624,27 @@
 @media (max-width: 640px) {
   .sea-chat-widget {
     right: 12px;
-    left: 12px;
+    left: 6px;
     bottom: 12px;
   }
 
   .sea-chat-widget .chat-panel {
     width: 100%;
-    height: min(86vh, 700px);
+    height: min(84vh, 700px);
     transform-origin: bottom center;
   }
 
   .sea-chat-widget .chat-panel__header {
-    padding: 13px 12px 10px;
+    padding: 9px 12px 8px;
   }
 
   .sea-chat-widget .chat-panel__actions {
     flex-direction: row;
     align-items: center;
+  }
+
+  .sea-chat-widget .chat-panel__label {
+    font-size: 1.62rem;
   }
 
   .sea-chat-widget h2 {

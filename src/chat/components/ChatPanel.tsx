@@ -36,6 +36,7 @@ type ChatPanelProps = {
 export function ChatPanel(props: ChatPanelProps) {
   const title = props.title?.trim();
   const statusText = props.statusText?.trim();
+  const shouldShowStatus = props.statusText !== undefined;
 
   // "let" because this value will change — we add a class when the chat is open
   let panelClassName = "chat-panel";
@@ -51,10 +52,10 @@ export function ChatPanel(props: ChatPanelProps) {
         <div>
           <p className="chat-panel__label">{props.assistantName}</p>
           {title ? <h2>{title}</h2> : null}
-          {statusText ? (
+          {shouldShowStatus ? (
             <p className="chat-panel__status" aria-live="polite">
               <span className="status-dot" aria-hidden="true" />
-              {statusText}
+              {statusText ? <span>{statusText}</span> : null}
             </p>
           ) : null}
         </div>
