@@ -3,7 +3,12 @@ import type { ChatWidgetProps } from "./types";
 export const DEFAULT_WIDGET_PROPS: Required<
   Pick<
     ChatWidgetProps,
-    "assistantName" | "title" | "statusText" | "launcherText" | "initiallyOpen"
+    | "assistantName"
+    | "title"
+    | "statusText"
+    | "launcherText"
+    | "initiallyOpen"
+    | "historyTtlHours"
   >
 > = {
   assistantName: "SEA Assistant",
@@ -11,6 +16,7 @@ export const DEFAULT_WIDGET_PROPS: Required<
   statusText: "Online now",
   launcherText: "Chat with SEA",
   initiallyOpen: false,
+  historyTtlHours: 24,
 };
 
 export const WELCOME_MESSAGE = "Ask about pricing, support, or onboarding.";

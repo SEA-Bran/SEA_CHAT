@@ -4,6 +4,7 @@ import {
   BranchPicker,
   AssistantActionBar,
 } from "@assistant-ui/react-ui";
+import { useThread, useThreadRuntime } from "@assistant-ui/react";
 import { BotMessageSquare } from "lucide-react";
 import type { FC } from "react";
 import { WELCOME_MESSAGE, WELCOME_SUGGESTIONS } from "../defaults";
@@ -31,15 +32,26 @@ type ChatPanelProps = {
   title: string;
   statusText: string;
   onClose: () => void;
+  onClearHistory: () => void;
 };
 
 export function ChatPanel(props: ChatPanelProps) {
+  const threadRuntime = useThreadRuntime();
+  const hasMessages = useThread(function (state) {
+    return state.messages.length > 0;
+  });
+
   // "let" because this value will change — we add a class when the chat is open
   let panelClassName = "chat-panel";
 
   // When the chat is open, add the --open class so CSS makes it visible
   if (props.isOpen) {
     panelClassName += " chat-panel--open";
+  }
+
+  function handleClearHistory() {
+    threadRuntime.reset();
+    props.onClearHistory();
   }
 
   return (
@@ -54,14 +66,25 @@ export function ChatPanel(props: ChatPanelProps) {
           </p>
         </div>
 
-        <button
-          type="button"
-          className="icon-button"
-          onClick={props.onClose}
-          aria-label="Close chat"
-        >
-          <span aria-hidden="true">×</span>
-        </button>
+        <div className="chat-panel__actions">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={handleClearHistory}
+            disabled={!hasMessages}
+          >
+            Clear history
+          </button>
+
+          <button
+            type="button"
+            className="icon-button"
+            onClick={props.onClose}
+            aria-label="Close chat"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
       </header>
 
       <div className="chat-panel__body chat-panel__body--thread">

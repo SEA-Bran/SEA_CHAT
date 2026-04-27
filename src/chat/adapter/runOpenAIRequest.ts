@@ -30,7 +30,9 @@ export async function runOpenAIRequest(
     throw new Error("openaiApiKey is required");
   }
 
-  let tools;
+  let tools:
+    | Array<{ type: "file_search"; vector_store_ids: string[] }>
+    | undefined;
 
   if (options.vectorStoreId) {
     tools = [

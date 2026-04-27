@@ -6,6 +6,8 @@ export type ChatWidgetProps = OpenAIResponsesAdapterOptions & {
   statusText?: string;
   launcherText?: string;
   initiallyOpen?: boolean;
+  historyTtlHours?: number;
+  historyStorageKey?: string;
 };
 
 export type WidgetTarget = string | HTMLElement;
